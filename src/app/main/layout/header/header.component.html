@@ -1,0 +1,79 @@
+
+<!-- header -->
+<div id="main_header">
+    <header>
+        <div class="header-innr">
+            <!-- Logo-->
+            <div class="header-btn-traiger" uk-toggle="target: #wrapper; cls: collapse-sidebar mobile-visible">
+                <span></span></div>
+
+            <!-- Logo-->
+            <div id="logo">
+                <a [routerLink]="['']"> <img src="assets/images/logo.png" alt=""></a>
+                <a [routerLink]="['']"> <img src="assets/images/logo-light.png" class="logo-inverse" alt=""></a>
+            </div>
+
+            <!-- form search-->
+            <div class="head_search">
+                <form>
+                    <div class="head_search_cont">
+                        <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.." autocomplete="off">
+                        <i class="s_icon uil-search-alt"></i>
+                    </div>
+                </form>
+            </div>
+
+            <!-- user icons -->
+            <div class="head_user">
+                <app-tin-nhan></app-tin-nhan>
+
+                <app-thong-bao></app-thong-bao>
+
+
+                <!-- profile -image -->
+                <a class="opts_account" href="#"> <img src="assets/images/avatars/avatar-2.jpg" alt=""></a>
+
+                <!-- profile dropdown-->
+                <div uk-dropdown="mode:click; animation: uk-animation-slide-bottom-small"
+                    class="dropdown-notifications rounded">
+
+                    <!-- User Name / Avatar -->
+                    <a href="timeline.html">
+
+                        <div class="dropdown-user-details">
+                            <div class="dropdown-user-avatar">
+                                <img src="assets/images/avatars/avatar-1.jpg" alt="">
+                            </div>
+                            <div class="dropdown-user-name"> Dennis Han   <span>See your profile</span> </div>
+                        </div>
+
+                    </a>
+
+                    <hr class="m-0">
+                    <ul class="dropdown-user-menu">
+                        <li><a href="page-setting.html"> <i class="uil-user"></i> My Account </a> </li>
+                        <li><a href="group-feed.html"> <i class="uil-thumbs-up"></i> Liked Pages </a></li>
+                        <li><a href="page-setting.html"> <i class="uil-cog"></i> Account Settings</a></li>
+                        <li>
+                            <a href="#" id="night-mode" class="btn-night-mode">
+                                <i class="uil-moon"></i> Night mode
+                                <span class="btn-night-mode-switch">
+                                    <span class="uk-switch-button"></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li><a href="form-login.html"> <i class="uil-sign-out-alt"></i>Log Out</a>
+                        </li>
+                    </ul>
+
+                    <hr class="m-0">
+                    <ul class="dropdown-user-menu">
+                        <li><a href="page-setting.html" class="bg-secondery"> <i class="uil-bolt"></i>
+                        <div> Upgrade To Premium <span> Pro features give you complete control </span> </div> </a> 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> <!-- / heaader-innr -->
+    </header>
+</div>
