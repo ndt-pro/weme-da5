@@ -27,29 +27,24 @@
                     <span class="focus-input100"></span>
                 </div>
 
+                <div class="wrap-input100 m-b-18">
+                    <span class="label-input100">Xác nhận mật khẩu</span>
+                    <input class="input100" type="password" name="pass" placeholder="Nhập lại mật khẩu">
+                    <span class="focus-input100"></span>
+                </div>
+
                 <div class="flex-sb-m w-full p-b-30">
-                    <div class="contact100-form-checkbox">
-                        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                        <label class="label-checkbox100" for="ckb1">
-                            Nhớ tài khoản
-                        </label>
+                    <div>
+                        <button class="login100-form-btn">
+                            Đăng ký
+                        </button>
                     </div>
 
                     <div>
-                        <a href="#" class="txt1">
-                            Quên mật khẩu
-                        </a>
+                        <button class="login100-form-btn red" [routerLink]="['/login']">
+                            Đăng nhập
+                        </button>
                     </div>
-                </div>
-
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn">
-                        Đăng ký
-                    </button>
-
-                    <button class="login100-form-btn red ml-5" [routerLink]="['/login']">
-                        Đăng nhập
-                    </button>
                 </div>
             </form>
         </div>
