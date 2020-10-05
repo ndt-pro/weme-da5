@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseComponent } from '../lib/base.component';
+import { BaseComponent } from '../_lib/base.component';
 
 @Component({
   selector: 'app-main',
@@ -14,10 +14,5 @@ export class MainComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadScripts();
-    let data = this._api.get("/api/LoaiHangsx");
-    data.toPromise()
-    .then(res => console.log(res))
-    .catch(error => console.log(error))
-    // console.log(data);
   }
 }
