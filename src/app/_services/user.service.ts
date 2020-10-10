@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { User } from '../_model/user';
 
-const baseUrl = environment.apiUrl;
+const baseUrl = environment.apiUrl + "Users";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class UserService {
 
     create(user) {
         return this._http
-            .post(baseUrl, user, { headers: environment.headerOptions })
+            .post(baseUrl + "/register", user, { headers: environment.headerOptions })
             .pipe(map((res: any) => {
                 return res;
             }));

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User } from '../_model/user';
 import { UserService } from '../_services/user.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-register',
@@ -17,15 +20,62 @@ import { UserService } from '../_services/user.service';
   ]
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
+  form: FormGroup;
+  loading: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private router: Router,
     ) { }
 
   ngOnInit(): void {
-    // this.registerForm = this.formBuilder.group();
+    this.form = this.formBuilder.group({
+      full_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone_number: ['', Validators.required],
+      pass: ['', Validators.required],
+      pass_confirm: ['', Validators.required],
+    });
+  }
+
+  onSubmit() {
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.loading = true;
+
+    let val = this.form.value;
+
+    let user = {
+      Email: val.email,
+      Password: val.pass,
+      FullName: val.full_name,
+      PhoneNumber: val.phone_number,
+      Address: "Mặc định",
+    };
+
+    this.userService.create(user).toPromise()
+    .then(user => {
+      this.loading = false;
+      Swal.fire({
+        icon: 'success',
+        title: 'Đăng ký tài khoản thành công. Bạn có muốn đăng nhập?',
+        showCancelButton: true,
+        confirmButtonText: 'Đăng nhập',
+        cancelButtonText: 'Quay lại',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+      })
+    })
+    .catch(err => {
+      this.loading = false;
+      console.error(err);
+    });
   }
 
 }

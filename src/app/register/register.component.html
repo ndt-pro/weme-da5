@@ -8,28 +8,34 @@
                 </span>
             </div>
 
-            <form class="login100-form validate-form">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login100-form validate-form">
                 <div class="wrap-input100 m-b-26">
                     <span class="label-input100">Họ tên</span>
-                    <input class="input100" type="email" name="text" placeholder="Nhập họ tên">
+                    <input class="input100" type="text" name="text" placeholder="Nhập họ tên" formControlName="full_name">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 m-b-26">
                     <span class="label-input100">Email</span>
-                    <input class="input100 is-invalid" type="email" name="email" placeholder="Nhập email">
+                    <input class="input100" type="email" name="email" placeholder="Nhập email" formControlName="email">
+                    <span class="focus-input100"></span>
+                </div>
+
+                <div class="wrap-input100 m-b-26">
+                    <span class="label-input100">Số điện thoại</span>
+                    <input class="input100" type="text" name="phone_number" placeholder="Nhập số điện thoại" formControlName="phone_number">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 m-b-18">
                     <span class="label-input100">Mật khẩu</span>
-                    <input class="input100" type="password" name="pass" placeholder="Nhập mật khẩu">
+                    <input class="input100" type="password" name="pass" placeholder="Nhập mật khẩu" formControlName="pass">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 m-b-18">
                     <span class="label-input100">Xác nhận mật khẩu</span>
-                    <input class="input100" type="password" name="pass" placeholder="Nhập lại mật khẩu">
+                    <input class="input100" type="password" name="pass" placeholder="Nhập lại mật khẩu" formControlName="pass_confirm">
                     <span class="focus-input100"></span>
                 </div>
 
@@ -50,3 +56,5 @@
         </div>
     </div>
 </div>
+
+<div ndt-loading *ngIf="loading"></div>

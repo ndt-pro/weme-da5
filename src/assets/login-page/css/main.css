@@ -286,6 +286,10 @@ iframe {
   padding: 0 5px;
 }
 
+.input100.is-valid {
+  color: red;
+}
+
 .focus-input100 {
   position: absolute;
   display: block;
