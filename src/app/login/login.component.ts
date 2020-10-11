@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { UserService } from '../_services/user.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertService } from '../_services/alert.service';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,17 +19,49 @@ import { UserService } from '../_services/user.service';
   ]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  form: FormGroup;
+  loading: boolean = false;
+  returnUrl: string;
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserService
-    ) { }
+    private authService: AuthService,
+    private alert: AlertService,
+    private router: Router,
+    private route: ActivatedRoute
+    ) {
+      if(this.authService.userValue) {
+        this.router.navigate(['/']);
+      }
+    }
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      email: this.formBuilder.control(''),
-      pass: this.formBuilder.control(''),
+    this.form = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      pass: ['', Validators.required]
+    });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  onSubmit() {
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.loading = true;
+
+    let val = this.form.value;
+
+    this.authService.login(val.email, val.pass).toPromise()
+    .then(res => {
+      this.loading = false;
+      this.router.navigate([this.returnUrl]);
+    })
+    .catch(err => {
+      this.loading = false;
+      this.alert.error(err);
     });
   }
 

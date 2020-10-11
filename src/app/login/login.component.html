@@ -8,7 +8,7 @@
                 </span>
             </div>
 
-            <form [formGroup]="loginForm" class="login100-form validate-form">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login100-form validate-form">
                 <div class="wrap-input100 m-b-26">
                     <span class="label-input100">Email</span>
                     <input class="input100" type="email" name="email" placeholder="Nhập email" formControlName="email">
@@ -53,3 +53,5 @@
         </div>
     </div>
 </div>
+
+<div ndt-loading *ngIf="loading"></div>

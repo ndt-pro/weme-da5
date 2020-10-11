@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from '../_model/user';
-import { UserService } from '../_services/user.service';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { AlertService } from '../_services/alert.service';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -25,8 +23,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserService,
-    private router: Router,
+    private authService: AuthService,
+    private alert: AlertService,
     ) { }
 
   ngOnInit(): void {
@@ -57,24 +55,14 @@ export class RegisterComponent implements OnInit {
       Address: "Mặc định",
     };
 
-    this.userService.create(user).toPromise()
+    this.authService.register(user).toPromise()
     .then(user => {
       this.loading = false;
-      Swal.fire({
-        icon: 'success',
-        title: 'Đăng ký tài khoản thành công. Bạn có muốn đăng nhập?',
-        showCancelButton: true,
-        confirmButtonText: 'Đăng nhập',
-        cancelButtonText: 'Quay lại',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(['/login']);
-        }
-      })
+      this.alert.registerSuccess();
     })
     .catch(err => {
       this.loading = false;
-      console.error(err);
+      this.alert.error(err.message);
     });
   }
 
