@@ -6,7 +6,8 @@ import { HttpHeaders } from "@angular/common/http";
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:56732/api/',
+  apiUrl: 'http://localhost:5000/api/',
+  avatarUrl: 'http://localhost:5000/Uploads/images/',
   headerOptions: new HttpHeaders({
       'Content-Type': 'application/json'
   })

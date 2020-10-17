@@ -9,8 +9,8 @@
 
             <!-- Logo-->
             <div id="logo">
-                <a [routerLink]="['']"> <img src="assets/images/logo.png" alt=""></a>
-                <a [routerLink]="['']"> <img src="assets/images/logo-light.png" class="logo-inverse" alt=""></a>
+                <a [routerLink]="['']"> <img src="assets/images/weme.png" alt=""></a>
+                <a [routerLink]="['']"> <img src="assets/images/weme-light.png" class="logo-inverse" alt=""></a>
             </div>
 
             <!-- form search-->
@@ -31,7 +31,7 @@
 
 
                 <!-- profile -image -->
-                <a class="opts_account" href="#"> <img src="assets/images/avatars/avatar-2.jpg" alt=""></a>
+                <a class="opts_account" href="#"> <img src="{{authService.getAvatar}}" alt=""></a>
 
                 <!-- profile dropdown-->
                 <div uk-dropdown="mode:click; animation: uk-animation-slide-bottom-small"
@@ -42,34 +42,26 @@
 
                         <div class="dropdown-user-details">
                             <div class="dropdown-user-avatar">
-                                <img src="assets/images/avatars/avatar-1.jpg" alt="">
+                                <img src="{{authService.getAvatar}}" alt="">
                             </div>
-                            <div class="dropdown-user-name"> Dennis Han   <span>See your profile</span> </div>
+                            <div class="dropdown-user-name"> {{user.fullName}}   <span>Xem trang cá nhân</span> </div>
                         </div>
 
                     </a>
 
                     <hr class="m-0">
                     <ul class="dropdown-user-menu">
-                        <li><a href="page-setting.html"> <i class="uil-user"></i> My Account </a> </li>
-                        <li><a href="group-feed.html"> <i class="uil-thumbs-up"></i> Liked Pages </a></li>
-                        <li><a href="page-setting.html"> <i class="uil-cog"></i> Account Settings</a></li>
+                        <li><a [routerLink]="['/profile']" > <i class="uil-user"></i> Trang cái nhân </a> </li>
+                        <li><a href=""> <i class="uil-lock"></i> Đổi mật khẩu </a></li>
                         <li>
                             <a href="#" id="night-mode" class="btn-night-mode">
-                                <i class="uil-moon"></i> Night mode
+                                <i class="uil-moon"></i> Chế độ đêm
                                 <span class="btn-night-mode-switch">
                                     <span class="uk-switch-button"></span>
                                 </span>
                             </a>
                         </li>
-                        <li><a (click)="logout()"> <i class="uil-sign-out-alt"></i>Log Out</a>
-                        </li>
-                    </ul>
-
-                    <hr class="m-0">
-                    <ul class="dropdown-user-menu">
-                        <li><a href="page-setting.html" class="bg-secondery"> <i class="uil-bolt"></i>
-                        <div> Upgrade To Premium <span> Pro features give you complete control </span> </div> </a> 
+                        <li><a (click)="logout()"> <i class="uil-sign-out-alt"></i>Đăng xuất</a>
                         </li>
                     </ul>
                 </div>

@@ -20,7 +20,8 @@ import { AuthService } from '../_services/auth.service';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  loading: boolean = false;
+  loading: boolean;
+  submitted: boolean;
   returnUrl: string;
 
   constructor(
@@ -43,8 +44,13 @@ export class LoginComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['r_url'] || '/';
   }
+  
+  get f() {
+    return this.form.controls;
+  }
 
   onSubmit() {
+    this.submitted = true;
 
     if (this.form.invalid) {
       return;

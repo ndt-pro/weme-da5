@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/_model/user';
 import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
@@ -7,12 +8,14 @@ import { AuthService } from 'src/app/_services/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  user: User;
 
   constructor(
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.user = this.authService.userValue;
   }
 
   logout() {

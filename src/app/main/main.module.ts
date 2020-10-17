@@ -10,6 +10,9 @@ import { ChatComponent } from './chat/chat.component';
 import { DsOnlineComponent } from './home/ds-online/ds-online.component';
 import { TinNhanComponent } from './layout/header/tin-nhan/tin-nhan.component';
 import { ThongBaoComponent } from './layout/header/thong-bao/thong-bao.component';
+import { ProfileComponent } from './profile/profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ShareModule } from '../share/share.module';
 
 export const mainRoutes: Routes = [
   {
@@ -21,12 +24,15 @@ export const mainRoutes: Routes = [
         {
             path: 'chat', component: ChatComponent
         },
-          // {
-          //     path: 'user',  loadChildren: () => import('./user/user.module').then(m => m.UserModule)
-          // },
-          // {
-          //     path: 'product', loadChildren: () => import('./product/product.module').then(m => m.ProductModule)
-          // },
+        {
+            path: 'profile', component: ProfileComponent
+        },
+        {
+            path: 'profile/edit', component: EditProfileComponent
+        },
+        {
+            path: 'profile/:uid', component: ProfileComponent
+        },
       ]
   }
 ];
@@ -40,11 +46,14 @@ export const mainRoutes: Routes = [
     ChatComponent,
     DsOnlineComponent,
     TinNhanComponent,
-    ThongBaoComponent
+    ThongBaoComponent,
+    ProfileComponent,
+    EditProfileComponent
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(mainRoutes)
+    ShareModule,
+    RouterModule.forChild(mainRoutes),
   ]
 })
 export class MainModule { }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { User } from '../_model/user';
 
-const baseUrl = environment.apiUrl + "Users";
+const baseUrl = environment.apiUrl + "Users/";
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,18 @@ export class UserService {
             .get<User[]>(baseUrl, { headers: environment.headerOptions });
     }
 
-    create(user) {
+    getById(uid) {
         return this._http
-            .post(baseUrl + "/register", user, { headers: environment.headerOptions });
+            .get<User>(baseUrl + uid, { headers: environment.headerOptions });
+    }
+
+    create(data) {
+        return this._http
+            .post(baseUrl + "/register", data, { headers: environment.headerOptions });
+    }
+
+    update(id, data) {
+        return this._http
+            .put(baseUrl + id, data);
     }
 }

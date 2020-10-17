@@ -290,6 +290,10 @@ iframe {
   color: red;
 }
 
+.alert-valid {
+  color: red;
+}
+
 .focus-input100 {
   position: absolute;
   display: block;

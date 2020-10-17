@@ -19,7 +19,8 @@ import { AuthService } from '../_services/auth.service';
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
-  loading: boolean = false;
+  loading: boolean;
+  submitted: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,13 +32,20 @@ export class RegisterComponent implements OnInit {
     this.form = this.formBuilder.group({
       full_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone_number: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern('^(0)[0-9]{9}$')]],
       pass: ['', Validators.required],
       pass_confirm: ['', Validators.required],
+    }, {
+      validator: this.confirm_password_validate('pass', 'pass_confirm')
     });
   }
 
+  get f() {
+    return this.form.controls;
+  }
+
   onSubmit() {
+    this.submitted = true;
 
     if (this.form.invalid) {
       return;
@@ -62,8 +70,25 @@ export class RegisterComponent implements OnInit {
     })
     .catch(err => {
       this.loading = false;
-      this.alert.error(err.message);
+      this.alert.error(err);
     });
+  }
+
+  confirm_password_validate(pass: string, pass_confirm: string) {
+    return (formGroup: FormGroup) => {
+        const control = formGroup.controls[pass];
+        const matchingControl = formGroup.controls[pass_confirm];
+
+        if (matchingControl.errors && !matchingControl.errors.confirm_password) {
+            return;
+        }
+
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ confirm_password: true });
+        } else {
+            matchingControl.setErrors(null);
+        }
+    }
   }
 
 }

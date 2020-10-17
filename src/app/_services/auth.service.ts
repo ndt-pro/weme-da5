@@ -28,6 +28,14 @@ export class AuthService {
         return this.userSubject.value;
     }
 
+    public get getAvatar() {
+        return environment.avatarUrl + this.userValue.avatar;
+    }
+
+    public getAvatarUser(user: User) {
+        return environment.avatarUrl + user.avatar;
+    }
+
     register(data) {
         return this._http.post(baseUrl + "/register", data, { headers: environment.headerOptions });
     }
