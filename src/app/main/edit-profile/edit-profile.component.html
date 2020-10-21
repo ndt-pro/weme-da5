@@ -14,7 +14,7 @@
         </nav>
     </div>
 
-    <div class="uk-width-2-3@m mt-sm-3 pl-sm-0 p-sm-4">
+    <div class="uk-width-2-3@m pl-sm-4 pr-sm-4">
 
         <div class="uk-card-default rounded">
             <div class="p-3">
@@ -25,29 +25,42 @@
                 <div>
                     <h5 class="uk-text-bold mb-2"> Họ tên </h5>
                     <input type="text" class="uk-input" placeholder="Nhập họ tên..." formControlName="full_name">
+                    <ng-container *ngIf="submitted && f.full_name.errors">
+                        <div *ngIf="f.full_name.errors.required" class="alert alert-danger mt-2">Vui lòng nhập họ tên</div>
+                    </ng-container>
                 </div>
                 <div>
                     <h5 class="uk-text-bold mb-2"> Số điện thoại </h5>
                     <input type="text" class="uk-input" placeholder="Nhập số điện thoại..." formControlName="phone_number">
+                    <ng-container *ngIf="submitted && f.phone_number.errors">
+                        <div *ngIf="f.phone_number.errors.required" class="alert alert-danger mt-2">Vui lòng nhập số điện thoại</div>
+                        <div *ngIf="f.phone_number.errors.pattern" class="alert alert-danger mt-2">Số điện thoại không hợp lệ</div>
+                    </ng-container>
                 </div>
                 <div>
                     <h5 class="uk-text-bold mb-2"> Địa chỉ </h5>
                     <input type="text" class="uk-input" placeholder="Nhập địa chỉ..." formControlName="address">
+                    <ng-container *ngIf="submitted && f.address.errors">
+                        <div *ngIf="f.address.errors.required" class="alert alert-danger mt-2">Vui lòng nhập địa chỉ</div>
+                    </ng-container>
                 </div>
                 <div>
                     <h5 class="uk-text-bold mb-2"> Ảnh đại diện </h5>
-                    <p-fileUpload #file_avatar mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Chọn ảnh" multiple="false" accept="image/*" maxFileSize="1000000">
+                    <p-fileUpload #file_avatar mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Chọn ảnh" [multiple]="false" accept="image/*" maxFileSize="1000000">
                         <ng-template pTemplate="content">
-                            <img *ngIf="user" style="height: 100px;width: 100px;" src="{{authService.getAvatar}}">
+                            <img *ngIf="user" style="height: 100px;width: 100px;" src="{{user.avatar | getImage}}">
                         </ng-template>
                     </p-fileUpload>
+                    <div *ngIf="submitted && !file_avatar.hasFiles()" class="alert alert-danger mt-2">Vui lòng chọn một ảnh</div>
                 </div>
 
                 <div class="uk-flex uk-flex-right p-4">
-                    <button class="button soft-primary mr-2">Hủy</button>
+                    <button [routerLink]="['/profile']" class="button soft-primary mr-2">Hủy</button>
                     <button class="button primary">Lưu thay đổi</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<div ndt-loading *ngIf="loading"></div>

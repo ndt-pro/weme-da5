@@ -24,13 +24,24 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/css/style.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/css/night-mode.css",
+              "src/assets/css/framework.css",
+              "src/assets/css/custom.css",
+              "src/assets/css/icons.css",
               "src/styles.css",
               "node_modules/sweetalert2/src/sweetalert2.scss",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/saga-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/framework.js",
+              "src/assets/js/jquery-3.3.1.min.js",
+              "src/assets/js/simplebar.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {

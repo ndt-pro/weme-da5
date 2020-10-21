@@ -28,14 +28,6 @@ export class AuthService {
         return this.userSubject.value;
     }
 
-    public get getAvatar() {
-        return environment.avatarUrl + this.userValue.avatar;
-    }
-
-    public getAvatarUser(user: User) {
-        return environment.avatarUrl + user.avatar;
-    }
-
     register(data) {
         return this._http.post(baseUrl + "/register", data, { headers: environment.headerOptions });
     }
@@ -56,5 +48,20 @@ export class AuthService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this._router.navigate(['/login']);
+    }
+
+    updateUser(user: User) {
+        // let mUser = this.userValue;
+        // mUser.email = user.email;
+        // mUser.fullName = user.fullName;
+        // mUser.phoneNumber = user.phoneNumber;
+        // mUser.address = user.address;
+        // mUser.role = user.role;
+        // mUser.avatar = user.avatar;
+
+        user.token = this.userValue.token;
+
+        localStorage.setItem('user', JSON.stringify(user));
+        this.userSubject.next(user);
     }
 }

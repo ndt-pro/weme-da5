@@ -16,24 +16,24 @@ import { ShareModule } from '../share/share.module';
 
 export const mainRoutes: Routes = [
   {
-      path: '', component: MainComponent,
-      children: [
-        {
-            path: '', component: HomeComponent
-        },
-        {
-            path: 'chat', component: ChatComponent
-        },
-        {
-            path: 'profile', component: ProfileComponent
-        },
-        {
-            path: 'profile/edit', component: EditProfileComponent
-        },
-        {
-            path: 'profile/:uid', component: ProfileComponent
-        },
-      ]
+    path: '', component: MainComponent,
+    children: [
+      {
+          path: '', component: HomeComponent
+      },
+      {
+          path: 'chat', component: ChatComponent
+      },
+      {
+          path: 'profile', component: ProfileComponent
+      },
+      {
+          path: 'profile/edit', component: EditProfileComponent
+      },
+      {
+          path: 'profile/:uid', component: ProfileComponent
+      },
+    ]
   }
 ];
 

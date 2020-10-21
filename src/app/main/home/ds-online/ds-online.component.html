@@ -3,42 +3,35 @@
 <!-- sidebar -->
 <div uk-sticky="offset:70 ; media : @m">
     <ul class="uk-child-width-expand tab-small my-2 uk-tab">
-        <li class="uk-active"><a href="#">Friends</a></li>
+        <li class="uk-active"><a href="#">Đang trực tuyến</a></li>
     </ul>
 
     <div style="height: calc(100vh - 150px)">
         <!-- start member contact -->
-        <a href="#">
-            <div class="contact-list">
-                <div class="contact-list-media"> <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                    <span class="online-dot"></span> </div>
-                <h5> Toàn Nguyễn </h5>
-            </div>
-        </a>
-        <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
-            <div class="contact-list-box">
-                <div class="contact-list-box-media">
-                    <img src="assets/images/avatars/avatar-3.jpg" alt="">
-                    <span class="online-dot"></span>
+        <ng-container *ngFor="let item of socket.list_online">
+            <a href="#">
+                <div class="contact-list">
+                    <div class="contact-list-media"> <img src="{{item.avatar | getImage}}" alt="{{item.fullName}}">
+                        <span class="online-dot"></span> </div>
+                    <h5> {{item.fullName}} </h5>
                 </div>
-                <h4> Toàn Nguyễn </h4>
-                <p> <i class="uil-users-alt icon-small"></i> Become friends with <strong> Stella
-                        Johnson </strong> and
-                    <strong> 14 Others</strong>
-                </p>
-                <div class="contact-list-box-btns">
-                    <a href="#" class="button primary block mr-2">
-                        <i class="uil-envelope mr-1"></i>
-                        Send message
-                    </a>
-                    <a href="#" class="button secondary button-icon mr-2"> <i
-                            class="uil-list-ul">
-                        </i> </a>
-                    <a href="#" class="button secondary button-icon"> <i class="uil-ellipsis-h">
-                        </i> </a>
+            </a>
+            <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
+                <div class="contact-list-box">
+                    <div class="contact-list-box-media">
+                        <img src="{{item.avatar | getImage}}" alt="{{item.fullName}}">
+                        <span class="online-dot"></span>
+                    </div>
+                    <h4> {{item.fullName}} </h4>
+                    <div class="contact-list-box-btns">
+                        <a (click)="openModalMessage(item)" class="button primary block mr-2">
+                            <i class="uil-envelope mr-1"></i>
+                            Gửi tin nhắn
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
         <!-- end member contact -->
     </div>
 </div>

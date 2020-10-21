@@ -25,6 +25,15 @@ export class AlertService {
         });
     }
 
+    success(message) {
+        Swal
+        .fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: message
+        });
+    }
+
     error(message) {
         Swal
         .fire({

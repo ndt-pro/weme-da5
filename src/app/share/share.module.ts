@@ -2,11 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
-
-
+import { GetImagePipe } from '../_pipe/getimage.pipe';
+import { LoadingDirective } from '../_directive/loading.directive';
+import { TruncatePipe } from '../_pipe/truncate.pipe';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    GetImagePipe,
+    TruncatePipe,
+    LoadingDirective
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -16,6 +21,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     ReactiveFormsModule,
     FormsModule,
     FileUploadModule,
+    GetImagePipe,
+    TruncatePipe,
+    LoadingDirective,
     CommonModule
   ]
 })

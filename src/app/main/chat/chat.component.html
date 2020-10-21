@@ -13,35 +13,17 @@
                     </div>
 
                     <ul>
-                        <li>
-                            <a href="#">
-                                <div class="message-avatar"><i
-                                        class="status-icon status-online"></i><img
-                                        src="assets/images/avatars/avatar-2.jpg" alt="" /></div>
-
-                                <div class="message-by">
-                                    <div class="message-by-headline">
-                                        <h5>Jonathan Madano </h5>
-                                        <span>4 hours ago</span>
-                                    </div>
-                                    <p>You: Yes, in an organization stature, this is a must</p>
-                                    <span class="message-readed uil-check"> </span>
+                        <li *ngFor="let item of mess_box">
+                            <a (click)="getAllMessage(item)">
+                                <div class="message-avatar">
+                                    <i class="status-icon status-online"></i>
+                                    <img src="{{item.avatar | getImage}}" alt="." />
                                 </div>
-                            </a>
-                        </li>
-
-                        <li class="active-message">
-                            <a href="#">
-                                <div class="message-avatar"><i
-                                        class="status-icon status-online"></i><img
-                                        src="assets/images/avatars/avatar-2.jpg" alt="" /></div>
-
                                 <div class="message-by">
                                     <div class="message-by-headline">
-                                        <h5>Stella Johnson </h5>
-                                        <span>Yesterday</span>
+                                        <h5>{{item.to_name}}</h5>
                                     </div>
-                                    <p>What are you doing?</p>
+                                    <p>{{item.content}}</p>
                                 </div>
                             </a>
                         </li>
@@ -50,14 +32,12 @@
                 <!-- chats / End -->
 
                 <!-- Message Content -->
-                <div class="message-content">
-
+                <div class="message-content" *ngIf="user_focus">
                     <div class="chats-headline">
-
                         <div class="uk-flex">
-                            <img src="assets/images/avatars/avatar-3.jpg" width="40px"
+                            <img src="{{user_focus.avatar | getImage}}" width="40px"
                                 class="uk-border-circle" alt="">
-                            <h4 class="ml-2"> Alex Dolgove <span>Online</span> </h4>
+                            <h4 class="ml-2"> {{user_focus.to_name}} <span>Online</span> </h4>
                         </div>
 
                         <div class="message-action">
@@ -75,132 +55,39 @@
                     </div>
 
                     <!-- Message Content Inner -->
-                    <div class="message-content-inner">
+                    <div class="message-content-inner" id="message-content">
 
-                        <!-- Time Sign -->
-                        <div class="message-time-sign">
-                            <span>28 June, 2018</span>
-                        </div>
-
-                        <div class="message-bubble me">
+                        <div *ngFor="let item of mess_focus" class="message-bubble" [ngClass]="{me: item.from_id == authService.userValue.id}">
                             <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-1.jpg" alt="" />
+                                <div class="message-avatar">
+                                    <img *ngIf="item.from_id == authService.userValue.id || item.to_id == authService.userValue.id" src="{{item.from.avatar | getImage}}" alt="{{item.from.name}}" />
                                 </div>
                                 <div class="message-text">
-                                    <p>How likely are you to recommend our company
-                                        to your friends and family?</p>
+                                    <p>{{item.content}}</p>
                                 </div>
                             </div>
                             <div class="uk-clearfix"></div>
                         </div>
 
-                        <div class="message-bubble">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-2.jpg" alt="" />
-                                </div>
-                                <div class="message-text">
-                                    <p>Hey there, we’re just writing to let you know 👍</p>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
-
-                        <div class="message-bubble me">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-1.jpg" alt="" />
-                                </div>
-                                <div class="message-text">
-                                    <p>Ok, Understood! 😉</p>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
-
-
-                        <!-- Time Sign -->
-                        <div class="message-time-sign">
-                            <span>Yesterday</span>
-                        </div>
-
-                        <div class="message-bubble me">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-1.jpg" alt="" />
-                                </div>
-                                <div class="message-text">
-                                    <p> I just wanted to let you know You’ll receive notifications for
-                                        all issues, pull requests!.</p>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
-
-                        <div class="message-bubble">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-2.jpg" alt="" />
-                                </div>
-                                <div class="message-text">
-                                    <p>You were automatically subscribed
-                                        because you’ve been given access to the repository 😎</p>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
-
-                        <div class="message-bubble me">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-1.jpg" alt="" />
-                                </div>
-                                <div class="message-text">
-                                    <p>Ok But don't forget about last payment. 🙂</p>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
-
-                        <div class="message-bubble">
-                            <div class="message-bubble-inner">
-                                <div class="message-avatar"><img
-                                        src="assets/images/avatars/avatar-2.jpg" alt="" />
-                                </div>
-                                <div class="message-text w-auto uk-flex"> Typing..
-                                    <!-- Typing Indicator -->
-                                    <div class="typing-indicator">
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="uk-clearfix"></div>
-                        </div>
+                        <span id="scroll-to-bottom"></span>
                     </div>
                     <!-- Message Content Inner / End -->
 
                     <!-- Reply Area -->
                     <div class="message-reply">
-
-                        <form class="uk-flex-middle uk-width-1-1" uk-grid>
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="uk-flex-middle uk-width-1-1" uk-grid>
                             <div class="uk-flex uk-flex-middle mr-3 uk-width-auto">
-                                <a href="#" class="button primary" uk-tooltip="Gửi ảnh">
+                                <a class="button primary" uk-tooltip="Gửi ảnh">
                                     <i class="uil-image"></i>
                                 </a>
                             </div>
 
-                            <textarea class="uk-textarea uk-width-expand" rows="5"
-                                placeholder="Nhập tin nhắn..." data-autoresize></textarea>
+                            <input type="text" formControlName="content" class="uk-textarea uk-width-expand" placeholder="Nhập tin nhắn..." data-autoresize/>
 
                             <button type="submit" class="button primary uk-width-auto">
-                                <i class="uil-arrow-right"></i>
+                                <i class="fa fa-send-o"></i>
                             </button>
-
                         </form>
-
                     </div>
                 </div>
                 <!-- Message Content -->

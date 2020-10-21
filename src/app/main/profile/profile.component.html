@@ -7,7 +7,7 @@
     
         <div class="profile-details">
             <div class="profile-image">
-                <img src="{{authService.getAvatarUser(user_view)}}" alt="">
+                <img src="{{user_view.avatar | getImage:0}}" alt="">
             </div>
             <div class="profile-details-info">
                 <h1> {{user_view.fullName}} </h1>

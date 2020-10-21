@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { FileUpload } from 'primeng/fileupload';
 import { User } from 'src/app/_model/user';
+import { AlertService } from 'src/app/_services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -21,7 +23,9 @@ export class EditProfileComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     public authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private alert: AlertService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -30,9 +34,13 @@ export class EditProfileComponent implements OnInit {
     
     this.form = this.formBuilder.group({
       full_name: [this.user.fullName, [Validators.required]],
-      phone_number: [this.user.phoneNumber, Validators.required],
+      phone_number: [this.user.phoneNumber, [Validators.required, Validators.pattern('^(0)[0-9]{9}$')]],
       address: [this.user.address, Validators.required]
     });
+  }
+
+  get f() {
+    return this.form.controls;
   }
 
   logout() {
@@ -42,27 +50,13 @@ export class EditProfileComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    if (this.form.invalid) {
+    if (this.form.invalid || !this.file_avatar.hasFiles()) {
       return;
     }
 
     this.loading = true;
 
     let val = this.form.value;
-
-    // let data = {
-    //   FullName: val.full_name,
-    //   PhoneNumber: val.phone_number,
-    //   Address: val.address,
-    //   Avatar: this.file
-    // };
-
-    // let formData = new FormData();
-    // formData.append('FullName', val.full_name);
-    // formData.append('PhoneNumber', val.phone_number);
-    // formData.append('Address', val.address);
-
-    // console.log(this.file_avatar.files[0]);
 
     let file = this.file_avatar.files[0];
 
@@ -73,8 +67,15 @@ export class EditProfileComponent implements OnInit {
     formData.append('Avatar', file, file.name);
 
     this.userService.update(this.authService.userValue.id, formData).toPromise()
-    .then(res => console.log(res))
-    .catch(err => console.error(err));
+    .then(res => {
+      this.loading = false;
+      this.alert.success("Đã sửa thông tin thành công!");
+      location.reload();
+    })
+    .catch(err => {
+      this.loading = false;
+      this.alert.success(err);
+    });
   }
 
 }

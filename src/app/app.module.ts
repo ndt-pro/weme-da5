@@ -4,25 +4,27 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorPageComponent } from './error-page/error-page.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { LoadingDirective } from './_directive/loading.directive';
 import { JwtInterceptor } from './_helper/jwt.interceptor';
 import { ErrorInterceptor } from './_helper/error.interceptor';
+import { ShareModule } from './share/share.module';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ErrorPageComponent,
-    LoadingDirective
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    ReactiveFormsModule,
+    SocketIoModule.forRoot(config),
+    ShareModule,
     AppRoutingModule,
   ],
   providers: [
