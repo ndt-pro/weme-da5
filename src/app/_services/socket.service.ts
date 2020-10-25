@@ -42,4 +42,10 @@ export class SocketService {
     getMessage() {
         return this.socket.fromEvent<any>(this._KEY.SEND_MESSAGE).pipe(map(res => res));
     }
+
+    checkStatus(id): boolean {
+        if(this.list_online) {
+            return this.list_online.filter(user => user.id == id).length > 0;
+        }
+    }
 }

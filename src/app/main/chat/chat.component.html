@@ -7,16 +7,16 @@
                 <!-- chats -->
                 <div class="chats-inbox">
                     <div class="chats-headline">
-                        <div class="input-with-icon">
-                            <input class="uk-input" type="text" placeholder="Search">
-                        </div>
                     </div>
 
                     <ul>
                         <li *ngFor="let item of mess_box">
                             <a (click)="getAllMessage(item)">
                                 <div class="message-avatar">
-                                    <i class="status-icon status-online"></i>
+                                    <i class="status-icon" [ngClass]="{
+                                        'status-online': checkStatus(item),
+                                        'status-offline': !checkStatus(item)
+                                    }"></i>
                                     <img src="{{item.avatar | getImage}}" alt="." />
                                 </div>
                                 <div class="message-by">
@@ -34,20 +34,28 @@
                 <!-- Message Content -->
                 <div class="message-content" *ngIf="user_focus">
                     <div class="chats-headline">
+
                         <div class="uk-flex">
-                            <img src="{{user_focus.avatar | getImage}}" width="40px"
-                                class="uk-border-circle" alt="">
-                            <h4 class="ml-2"> {{user_focus.to_name}} <span>Online</span> </h4>
+                            <img src="{{user_focus.avatar | getImage}}" width="40px" height="40px" class="uk-border-circle" alt="">
+                            <h4 class="ml-2">
+                                {{user_focus.to_name}}
+                                <span>{{checkStatus(user_focus) ? 'Đang hoạt động' : 'Không hoạt động'}}</span>
+                            </h4>
                         </div>
 
                         <div class="message-action">
-                            <a href="#" uk-tooltip="Tùy chọn">
+                            <a href="#" uk-tooltip="filter" title="" aria-expanded="false">
+                                <i class="uil-outgoing-call"></i>
+                            </a>
+                            <a href="#" uk-tooltip="filter" title="" aria-expanded="false">
+                                <i class="uil-video"></i>
+                            </a>
+                            <a href="#" uk-tooltip="More" title="" aria-expanded="false">
                                 <i class="uil-ellipsis-h"></i>
                             </a>
-                            <div
-                                uk-dropdown="pos: left ; mode: click ;animation: uk-animation-slide-bottom-small">
+                            <div uk-dropdown="pos: left ; mode: click ;animation: uk-animation-slide-bottom-small" class="uk-dropdown">
                                 <ul class="uk-nav uk-dropdown-nav">
-                                    <li><a href="#" class="uk-text-danger"> Xóa tất cả tin nhắn </a></li>
+                                    <li><a href="#"> Xóa cuộc hội thoại</a></li>
                                 </ul>
                             </div>
                         </div>

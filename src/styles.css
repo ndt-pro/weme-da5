@@ -1,8 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
-.message-text {
+/* .message-text {
     word-wrap: break-word;
+    max-width: 30% !important;
 }
+
+.message-bubble {
+    max-width: 80% !important;
+} */
+
+/* 
+.uk-clearfix {
+    max-width: 300px !important;
+} */
+
+/* .message-content-inner {
+    width: 100%;
+} */
+
+/* .message-bubble {
+    max-width: 100%;
+} */
 /* 
 .modal-backdrop {
     display: none;
 } */
+
+.chats-headline {
+    box-sizing: unset;
+}

@@ -40,6 +40,8 @@ export class MainComponent extends BaseComponent implements OnInit {
 
     $("#modalSendMessage").modal("hide");
     this.socket.sendMessage(to_id, this.form.value.content);
-    this.router.navigate(['/chat']);
+    setTimeout(() => {
+      this.router.navigate(['/chat']);
+    }, 500);
   }
 }

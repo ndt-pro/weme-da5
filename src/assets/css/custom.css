@@ -5,12 +5,12 @@
     height: 100%;
     left: 0;
     top: 0;
-    z-index: 998;
+    z-index: 9998;
 }
 
 .progress-spinner {
     position: fixed;
-    z-index: 999;
+    z-index: 9999;
     height: 2em;
     width: 2em;
     overflow: show;
