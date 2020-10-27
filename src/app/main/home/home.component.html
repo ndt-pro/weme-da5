@@ -6,57 +6,41 @@
             <div class="post-new" uk-toggle="target: body ; cls: post-focus">
                 <div class="post-new-media">
                     <div class="post-new-media-user">
-                        <img src="assets/images/avatars/avatar-2.jpg" alt="">
+                        <img src="{{user.avatar | getImage}}" alt="">
                     </div>
                     <div class="post-new-media-input">
-                        <input type="text" class="uk-input" placeholder="What's Your Mind ? Hamse!">
+                        <input (click)="openModal()" type="text" class="uk-input" placeholder="Bạn đang nghĩ gì?">
                     </div>
                 </div>
                 <hr>
                 <div class="post-new-type">
-                    <a href="#">
+                    <a (click)="openModal()">
                         <img src="assets/images/icons/photo.png" alt="">
                         Thêm hình ảnh
                     </a>
                 </div>
             </div>
 
-            <div class="post-pop">
-                <div class="post-new-overyly" uk-toggle="target: body ; cls: post-focus"></div>
-                <div class="post-new uk-animation-slide-top-small">
-                    <div class="post-new-header">
-                        <h4>Thêm trạng thái</h4>
-                        <!-- close button-->
-                        <span class="post-new-btn-close" uk-toggle="target: body ; cls: post-focus" uk-tooltip="title:Close; pos: left "></span>
+            <p-dialog header="Thêm trạng thái" [(visible)]="modal" [modal]="true" [style]="{ width: '50vw', marginTop: '100px' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" position="top">
+                <div class="post-new-media">
+                    <div class="post-new-media-user">
+                        <img src="{{user.avatar | getImage}}" alt="">
                     </div>
-
-                    <div class="post-new-media">
-                        <div class="post-new-media-user">
-                            <img src="assets/images/avatars/avatar-2.jpg" alt="">
-                        </div>
-                        <div class="post-new-media-input">
-                            <input type="text" class="uk-input"
-                                placeholder="What's Your Mind ? Dennis!">
-                        </div>
-                    </div>
-                    <div class="post-new-tab-nav">
-                        <a href="#" uk-tooltip="title:Thêm hình ảnh"> <i class="uil-image"></i> </a>
-                    </div>
-                    <div class="uk-flex uk-flex-between">
-
-                        <button class="button outline-light circle" type="button" style="border-color: #e6e6e6; border-width: 1px;">Công khai</button>
-                        <div uk-dropdown>
-                            <ul class="uk-nav uk-dropdown-nav">
-                                <li class="uk-active"><a href="#">Công khai</a></li>
-                                <li><a href="#">Chỉ mình tôi</a></li>
-                                <li><a href="#">Bạn bè</a></li>
-                            </ul>
-                        </div>
-
-                        <a href="#" class="button primary px-6"> Chia sẻ </a>
+                    <div class="post-new-media-input">
+                        <textarea class="uk-textarea" rows="5" placeholder="Bạn đang nghĩ gì?"></textarea>
                     </div>
                 </div>
-            </div>
+                <div class="post-new-media mt-3">
+                    <div class="post-new-media-user" style="width: 40px; height: 40px;"></div>
+                    <div class="post-new-media-input">
+                        <p-fileUpload mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Tải ảnh lên" [multiple]="true" accept="image/*" maxFileSize="1000000"></p-fileUpload>
+                    </div>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-upload" (click)="closeModal()" type="button" label="Chia sẻ" class="p-button-rounded"></button>
+                </ng-template>
+            </p-dialog>
+
         </div>
 
 

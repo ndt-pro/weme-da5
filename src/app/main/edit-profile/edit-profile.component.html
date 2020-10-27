@@ -39,9 +39,20 @@
                 </div>
                 <div>
                     <h5 class="uk-text-bold mb-2"> Địa chỉ </h5>
-                    <input type="text" class="uk-input" placeholder="Nhập địa chỉ..." formControlName="address">
+                    <textarea class="uk-textarea" rows="5" placeholder="Nhập địa chỉ..." formControlName="address"></textarea>
                     <ng-container *ngIf="submitted && f.address.errors">
                         <div *ngIf="f.address.errors.required" class="alert alert-danger mt-2">Vui lòng nhập địa chỉ</div>
+                    </ng-container>
+                </div>
+                <div>
+                    <h5 class="uk-text-bold mb-2"> Tiểu sử </h5>
+                    <textarea class="uk-textarea" rows="5" placeholder="Nhập tiểu sử của bạn..." formControlName="story"></textarea>
+                </div>
+                <div>
+                    <h5 class="uk-text-bold mb-2"> Sinh nhật </h5>
+                    <p-calendar formControlName="birthday" [dateFormat]="dateFormat" [locale]="locale_vn" [showIcon]="true" inputId="icon"></p-calendar>
+                    <ng-container *ngIf="submitted && f.birthday.errors">
+                        <div *ngIf="f.birthday.errors.required" class="alert alert-danger mt-2">Vui chọn ngày sinh nhật của bạn</div>
                     </ng-container>
                 </div>
                 <div>
@@ -51,7 +62,6 @@
                             <img *ngIf="user" style="height: 100px;width: 100px;" src="{{user.avatar | getImage}}">
                         </ng-template>
                     </p-fileUpload>
-                    <div *ngIf="submitted && !file_avatar.hasFiles()" class="alert alert-danger mt-2">Vui lòng chọn một ảnh</div>
                 </div>
 
                 <div class="uk-flex uk-flex-right p-4">

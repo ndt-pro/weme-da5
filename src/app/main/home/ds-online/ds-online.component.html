@@ -9,7 +9,7 @@
     <div style="height: calc(100vh - 150px)">
         <!-- start member contact -->
         <ng-container *ngFor="let item of socket.list_online">
-            <a href="#">
+            <a [routerLink]="['/profile', item.id]" >
                 <div class="contact-list">
                     <div class="contact-list-media"> <img src="{{item.avatar | getImage}}" alt="{{item.fullName}}">
                         <span class="online-dot"></span> </div>

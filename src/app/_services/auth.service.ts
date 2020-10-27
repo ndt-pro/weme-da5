@@ -37,10 +37,13 @@ export class AuthService {
             Email: email,
             Password: password
         }, { headers: environment.headerOptions })
-        .pipe(map(user => {
-            localStorage.setItem('user', JSON.stringify(user));
-            this.userSubject.next(user);
-            return user;
+        .pipe(map(data => {
+            data.user.token = data.token;
+
+            localStorage.setItem('user', JSON.stringify(data.user));
+            this.userSubject.next(data.user);
+            
+            return data.user;
         }));
     }
 
@@ -51,14 +54,6 @@ export class AuthService {
     }
 
     updateUser(user: User) {
-        // let mUser = this.userValue;
-        // mUser.email = user.email;
-        // mUser.fullName = user.fullName;
-        // mUser.phoneNumber = user.phoneNumber;
-        // mUser.address = user.address;
-        // mUser.role = user.role;
-        // mUser.avatar = user.avatar;
-
         user.token = this.userValue.token;
 
         localStorage.setItem('user', JSON.stringify(user));

@@ -5,7 +5,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { FileUpload } from 'primeng/fileupload';
 import { User } from 'src/app/_model/user';
 import { AlertService } from 'src/app/_services/alert.service';
-import { Router } from '@angular/router';
+import { FileService } from 'src/app/_services/file.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,6 +17,8 @@ export class EditProfileComponent implements OnInit {
   loading: boolean;
   submitted: boolean;
   user: User;
+  dateFormat: any;
+  locale_vn: any;
   
   @ViewChild(FileUpload, { static: false }) file_avatar: FileUpload;
 
@@ -25,17 +27,82 @@ export class EditProfileComponent implements OnInit {
     public authService: AuthService,
     private userService: UserService,
     private alert: AlertService,
-    private router: Router
+    private fileService: FileService
   ) { }
 
   ngOnInit(): void {
     document.body.scrollTop = 0;
     this.user = this.authService.userValue;
+
+    this.dateFormat = "dd/mm/yy";
+    
+    this.locale_vn = {
+      "firstDayOfWeek": 1,
+      "dayNames": [
+        "Chủ nhật",
+        "Thứ 2",
+        "Thứ 3",
+        "Thứ 4",
+        "Thứ 5",
+        "Thứ 6",
+        "Thứ 7"
+      ],
+      "dayNamesShort": [
+        "CN",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ],
+      "dayNamesMin": [
+        "CN",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ],
+      "monthNames": [
+        "Tháng 1",
+        "Tháng 2",
+        "Tháng 3",
+        "Tháng 4",
+        "Tháng 5",
+        "Tháng 6",
+        "Tháng 7",
+        "Tháng 8",
+        "Tháng 9",
+        "Tháng 10",
+        "Tháng 11",
+        "Tháng 12"
+      ],
+      "monthNamesShort": [
+        "Th 1",
+        "Th 2",
+        "Th 3",
+        "Th 4",
+        "Th 5",
+        "Th 6",
+        "Th 7",
+        "Th 8",
+        "Th 9",
+        "Th 10",
+        "Th 11",
+        "Th 12"
+      ],
+      "today": "Hôm nay",
+      "clear": "Xóa"
+    };
     
     this.form = this.formBuilder.group({
-      full_name: [this.user.fullName, [Validators.required]],
+      full_name: [this.user.fullName, Validators.required],
       phone_number: [this.user.phoneNumber, [Validators.required, Validators.pattern('^(0)[0-9]{9}$')]],
-      address: [this.user.address, Validators.required]
+      address: [this.user.address, Validators.required],
+      story: [this.user.story],
+      birthday: [!this.user.birthday ? new Date() : new Date(this.user.birthday), Validators.required],
     });
   }
 
@@ -50,7 +117,7 @@ export class EditProfileComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    if (this.form.invalid || !this.file_avatar.hasFiles()) {
+    if (this.form.invalid) {
       return;
     }
 
@@ -60,22 +127,33 @@ export class EditProfileComponent implements OnInit {
 
     let file = this.file_avatar.files[0];
 
-    const formData = new FormData();
-    formData.append('FullName', val.full_name);
-    formData.append('PhoneNumber', val.phone_number);
-    formData.append('Address', val.address);
-    formData.append('Avatar', file, file.name);
+    let formData = {
+      FullName: val.full_name,
+      PhoneNumber: val.phone_number,
+      Address: val.address,
+      Story: val.story,
+      Birthday: val.birthday,
+      Avatar: undefined,
+    };
 
-    this.userService.update(this.authService.userValue.id, formData).toPromise()
-    .then(res => {
-      this.loading = false;
-      this.alert.success("Đã sửa thông tin thành công!");
-      location.reload();
-    })
-    .catch(err => {
-      this.loading = false;
-      this.alert.success(err);
+    this.fileService.getEncodeFromImage(file).subscribe(data => {
+      if(data != null) {
+        formData.Avatar = data;
+      }
+
+      this.userService.update(this.authService.userValue.id, formData).toPromise()
+      .then(res => {
+        this.loading = false;
+        this.alert.successCallback("Đã sửa thông tin thành công!", () => {
+          location.reload();
+        });
+      })
+      .catch(err => {
+        this.loading = false;
+        this.alert.error(err);
+      });
     });
+
   }
 
 }

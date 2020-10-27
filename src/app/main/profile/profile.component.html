@@ -11,6 +11,7 @@
             </div>
             <div class="profile-details-info">
                 <h1> {{user_view.fullName}} </h1>
+                <p> {{user_view.story}} </p>
             </div>
         </div>
     
@@ -118,6 +119,10 @@
                 <div class="list-group-items">
                     <i class="uil-location-point"></i>
                     <h5> Địa chỉ: <span> {{user_view.address}} </span> </h5>
+                </div>
+                <div class="list-group-items">
+                    <i class="uil-calendar-alt"></i>
+                    <h5> Sinh nhật: <span> {{user_view.birthday | date:'dd/MM/yyyy'}} </span> </h5>
                 </div>
                 <div class="list-group-items">
                     <i class="uil-thumbs-up"></i>

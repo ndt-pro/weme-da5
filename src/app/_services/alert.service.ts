@@ -34,6 +34,21 @@ export class AlertService {
         });
     }
 
+    successCallback(message, callback) {
+        Swal
+        .fire({
+            title: "Thành công",
+            text: message,
+            icon: 'success',
+            confirmButtonText: 'Đồng ý',
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                callback();
+            }
+        });
+    }
+
     error(message) {
         Swal
         .fire({
