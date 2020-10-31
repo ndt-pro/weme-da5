@@ -1,8 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { User } from '../_model/user';
 
 const baseUrl = environment.apiUrl + "Messages/";
 
@@ -11,21 +10,43 @@ const baseUrl = environment.apiUrl + "Messages/";
 })
 
 export class MessageService {
+    newMessage: any[];
+
     constructor(
         private _http: HttpClient
     ) { }
+
+    countNewMessage(user_id) {
+        return this._http
+            .get<any>(baseUrl + "count-new-message/" + user_id, { headers: environment.headerOptions });
+    }
 
     getMessageBox(user_id) {
         return this._http
             .get<any>(baseUrl + "get-mess-box/" + user_id, { headers: environment.headerOptions });
     }
 
-    getAllMessage(from_id, to_id) {
+    getAllMessage(fromId, toId) {
         let params = new HttpParams()
-        .set('from_id', from_id)
-        .set('to_id', to_id);
+        .set('from_id', fromId)
+        .set('to_id', toId);
 
         return this._http
-            .get<any>(baseUrl + "get-all-mess", { headers: environment.headerOptions, params: params});
+            .get<any>(baseUrl + "get-all-mess", { headers: environment.headerOptions, params: params})
+            .pipe(map((res: any) => {
+                return res.map(data => {
+                    data.media = JSON.parse(data.media);
+                    return data;
+                });
+            }));
+    }
+
+    seeMessage(fromId, toId) {
+        let data = {
+            fromUserId: fromId,
+            toUserId: toId,
+        };
+        return this._http
+            .put(baseUrl + "see-message", data, { headers: environment.headerOptions });
     }
 }

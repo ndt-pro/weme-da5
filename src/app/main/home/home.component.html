@@ -20,87 +20,106 @@
                     </a>
                 </div>
             </div>
-
-            <p-dialog header="Thêm trạng thái" [(visible)]="modal" [modal]="true" [style]="{ width: '50vw', marginTop: '100px' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" position="top">
-                <div class="post-new-media">
-                    <div class="post-new-media-user">
-                        <img src="{{user.avatar | getImage}}" alt="">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <p-dialog header="Thêm trạng thái" [(visible)]="modal" [modal]="true" [style]="{ width: '50vw', marginTop: '100px' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" position="top">
+                    <div class="post-new-media">
+                        <div class="post-new-media-user">
+                            <img src="{{user.avatar | getImage}}" alt="">
+                        </div>
+                        <div class="post-new-media-input">
+                            <textarea class="uk-textarea" rows="5" placeholder="Bạn đang nghĩ gì?" formControlName="content"></textarea>
+                            <ng-container *ngIf="submitted && f.content.errors">
+                                <div *ngIf="f.content.errors.required" class="alert alert-danger mt-2">Vui lòng nhập nội dung</div>
+                            </ng-container>
+                        </div>
                     </div>
-                    <div class="post-new-media-input">
-                        <textarea class="uk-textarea" rows="5" placeholder="Bạn đang nghĩ gì?"></textarea>
+                    <div class="post-new-media mt-3">
+                        <div class="post-new-media-user" style="width: 40px; height: 40px;"></div>
+                        <div class="post-new-media-input">
+                            <p-fileUpload mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Tải ảnh lên" [multiple]="true" accept="image/*" maxFileSize="1000000"></p-fileUpload>
+                        </div>
                     </div>
-                </div>
-                <div class="post-new-media mt-3">
-                    <div class="post-new-media-user" style="width: 40px; height: 40px;"></div>
-                    <div class="post-new-media-input">
-                        <p-fileUpload mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Tải ảnh lên" [multiple]="true" accept="image/*" maxFileSize="1000000"></p-fileUpload>
-                    </div>
-                </div>
-                <ng-template pTemplate="footer">
-                    <button pButton pRipple icon="pi pi-upload" (click)="closeModal()" type="button" label="Chia sẻ" class="p-button-rounded"></button>
-                </ng-template>
-            </p-dialog>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple icon="pi pi-upload" type="submit" label="Chia sẻ" class="p-button-rounded"></button>
+                    </ng-template>
+                </p-dialog>
+            </form>
 
         </div>
 
 
-        <div class="post">
+        <div class="post" *ngFor="let item of newfeeds">
             <div class="post-heading">
                 <div class="post-avature">
-                    <img src="assets/images/avatars/avatar-6.jpg" alt="">
+                    <img src="{{item.user.avatar | getImage}}" alt="{{item.user.fullName}}">
                 </div>
                 <div class="post-title">
-                    <h4> Mariah Ali </h4>
-                    <p> 5 <span> hrs</span> <i class="uil-users-alt"></i> </p>
+                    <a [routerLink]="['/profile', item.user.id]"><h4> {{item.user.fullName}} </h4></a>
+                    <p> {{item.createdAt | timeago}} <i class="uil-clock"></i> </p>
                 </div>
 
-                <div class="post-btn-action">
+                <div class="post-btn-action" *ngIf="item.user.id == user.id">
                     <span class="icon-more uil-ellipsis-h"></span>
                     <div class="mt-0 p-2" uk-dropdown="pos: bottom-right;mode:hover ">
                         <ul class="uk-nav uk-dropdown-nav">
-                            <li><a href="#"> <i class="uil-edit-alt mr-1"></i> Sửa </a></li>
-                            <li><a href="#" class="text-danger"> <i class="uil-trash-alt mr-1"></i> Xóa </a></li>
+                            <!-- <li><a href="#"> <i class="uil-edit-alt mr-1"></i> Sửa </a></li> -->
+                            <li><a (click)="onDelete(item)" class="text-danger"> <i class="uil-trash-alt mr-1"></i> Xóa </a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="post-description">
-                <p>Đây là dòng văn bản</p>
-                <div class="uk-grid-small" uk-grid>
-                    <div class="uk-width-1-1@m">
-                        <img src="assets/images/post/img-4.jpg" class="rounded" alt="">
-                    </div>
-                    <div class="uk-width-1-2@m uk-width-1-2">
-                        <img src="assets/images/post/img-2.jpg" class="rounded" alt="">
-                    </div>
-                    <div class="uk-width-1-2@m uk-width-1-2 uk-position-relative">
-                        <img src="assets/images/post/img-3.jpg" class="rounded" alt="">
-                        <div class="uk-position-center uk-light">
-                            <a href="#">
-                                <h3> + 15 more </h3>
-                            </a></div>
-                    </div>
-                </div>
+                <p *ngIf="item.content">{{item.content}}</p>
 
-                <!-- <div class="fullsizeimg">
-                    <img src="assets/images/post/img-1.jpg" alt="">
-                </div> -->
+                <ng-container *ngIf="item.media.length == 1">
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-1@m">
+                            <img src="{{item.media[0] | getImage:1}}" class="rounded" alt=".">
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="item.media.length == 2">
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-2@m" *ngFor="let image of item.media">
+                            <img src="{{image | getImage:1}}" class="rounded" alt=".">
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="item.media.length > 2">
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-1@m">
+                            <img src="{{item.media[0] | getImage:1}}" class="rounded" alt=".">
+                        </div>
+                        <div class="uk-width-1-2@m uk-width-1-2">
+                            <img src="{{item.media[1] | getImage:1}}" class="rounded" alt=".">
+                        </div>
+                        <div class="uk-width-1-2@m uk-width-1-2 uk-position-relative">
+                            <img src="{{item.media[2] | getImage:1}}" class="rounded" alt=".">
+                            <div class="uk-position-center uk-light" *ngIf="item.media.length > 3">
+                                <a href="#">
+                                    <h3> Xem tất cả </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                
 
                 <div class="post-state-details">
-                    <div>
+                    <div class="cursor-pointer" (click)="openModalUserLikes(item)">
                         <img src="assets/images/icons/reactions_like.png" alt="">
-                        <p> 13 </p>
+                        <p> {{item.countLike}} </p>
                     </div>
-                    <p> 24 Comments</p>
+                    <p> {{item.countComment}} Bình luận</p>
                 </div>
 
             </div>
 
             <div class="post-state">
-                <div class="post-state-btns"> <i class="uil-thumbs-up"></i> 13<span> Liked </span>
-                </div>
-                <div class="post-state-btns"> <i class="uil-heart"></i> 18 <span> Coments</span>
-                </div>
+                <div class="post-state-btns" [ngClass]="{'active': item.liked}" (click)="onLike(item)"> <i class="uil-thumbs-up"></i> <span> Thích </span> </div>
+                <div class="post-state-btns"> <i class="uil-comment-alt-dots"></i> <span> Bình luận</span> </div>
             </div>
 
             <!-- post comments -->
@@ -110,12 +129,30 @@
                         <img src="assets/images/avatars/avatar-2.jpg" alt="">
                     </div>
                     <div class="post-add-comment-text-area">
-                        <input type="text" placeholder="Write your comment...">
+                        <input type="text" placeholder="Viết bình luận...">
                     </div>
                 </div>
             </div>
+
+            <p-dialog header="Đã thích bài viết này" [(visible)]="modalUserLikes" [style]="{ minWidth: '300px' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+                <a *ngFor="let user of newfeedsLike" [routerLink]="['/profile', user.id]" >
+                    <div class="contact-list">
+                        <div class="contact-list-media">
+                            <img src="{{user.avatar | getImage}}" alt="{{user.fullName}}">
+                            <span [ngClass]="{
+                                'online-dot': socket.checkStatus(user.id),
+                                'offline-dot': !socket.checkStatus(user.id)
+                            }"></span>
+                        </div>
+                        <h5> {{user.fullName}} </h5>
+                    </div>
+                </a>
+                <div class="sp sp-circle" *ngIf="loadingUserLikes"></div>
+            </p-dialog>
         </div>
     </div>
 
     <app-ds-online class="uk-width-expand"></app-ds-online>
 </div>
+
+<div ndt-loading *ngIf="loading"></div>

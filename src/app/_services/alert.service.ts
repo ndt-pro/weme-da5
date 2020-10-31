@@ -57,4 +57,23 @@ export class AlertService {
             text: message
         });
     }
+
+    delete(message, callback) {
+        Swal
+        .fire({
+            title: message,
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy',
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                callback();
+            }
+        });
+    }
 }

@@ -1,24 +1,20 @@
 
 
 <!-- Message  notificiation dropdown -->
-<a href="#" class="opts_icon" uk-tooltip="title: Messages ; pos: bottom ;offset:7">
-    <img src="assets/images/icons/chat.svg" alt=""> <span>4</span>
+<a [routerLink]="['/chat']"  class="opts_icon" uk-tooltip="title: Tin nhắn ; pos: bottom ;offset:7">
+    <img src="assets/images/icons/chat.svg" alt=""> <span>{{count}}</span>
 </a>
 
 <!-- Message  notificiation dropdown -->
-<div uk-dropdown="mode:click ; animation: uk-animation-slide-bottom-small" class="dropdown-notifications">
+<!-- <div uk-dropdown="mode:click ; animation: uk-animation-slide-bottom-small" class="dropdown-notifications">
 
-    <!-- notification contents -->
     <div class="dropdown-notifications-content" data-simplebar>
 
-        <!-- notivication header -->
         <div class="dropdown-notifications-headline">
             <h4>Messages</h4>
         </div>
 
-        <!-- notiviation list -->
         <ul>
-            <!-- start message -->
             <li>
                 <a href="#">
                     <span class="notification-avatar status-online">
@@ -31,11 +27,10 @@
                     </div>
                 </a>
             </li>
-            <!-- end message -->
         </ul>
 
     </div>
     <div class="dropdown-notifications-footer">
         <a href="#"> See all in Messages</a>
     </div>
-</div>
+</div> -->

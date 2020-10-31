@@ -4,8 +4,9 @@ import { environment } from '../../environments/environment'
 @Pipe({ name: 'getImage' })
 export class GetImagePipe implements PipeTransform {
     types = [
-        'avatars/',
-        'threads/'
+        "avatars/",
+        "newfeeds/",
+        "messages/",
     ];
 
     transform(name: string, type: number = 0) {

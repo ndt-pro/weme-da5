@@ -10,20 +10,21 @@
                     </div>
 
                     <ul>
-                        <li *ngFor="let item of mess_box">
+                        <li *ngFor="let item of mess_box" [ngClass]="{'active-message': item.lastMessage.status == 0}">
                             <a (click)="getAllMessage(item)">
                                 <div class="message-avatar">
                                     <i class="status-icon" [ngClass]="{
-                                        'status-online': checkStatus(item),
-                                        'status-offline': !checkStatus(item)
+                                        'status-online': socket.checkStatus(item.toUser.id),
+                                        'status-offline': !socket.checkStatus(item.toUser.id)
                                     }"></i>
-                                    <img src="{{item.avatar | getImage}}" alt="." />
+                                    <img src="{{item.toUser.avatar | getImage}}" alt="." />
                                 </div>
                                 <div class="message-by">
                                     <div class="message-by-headline">
-                                        <h5>{{item.to_name}}</h5>
+                                        <h5>{{item.toUser.fullName}}</h5>
+                                        <span>{{item.lastMessage.createdAt | timeago:1}}</span>
                                     </div>
-                                    <p>{{item.content}}</p>
+                                    <p [ngStyle]="{fontWeight: item.lastMessage.status == 0 ? 'bold' : 'normal'}">{{item.lastMessage.content}}</p>
                                 </div>
                             </a>
                         </li>
@@ -36,10 +37,10 @@
                     <div class="chats-headline">
 
                         <div class="uk-flex">
-                            <img src="{{user_focus.avatar | getImage}}" width="40px" height="40px" class="uk-border-circle" alt="">
+                            <img src="{{user_focus.toUser.avatar | getImage}}" width="40px" height="40px" class="uk-border-circle" alt="">
                             <h4 class="ml-2">
-                                {{user_focus.to_name}}
-                                <span>{{checkStatus(user_focus) ? 'Đang hoạt động' : 'Không hoạt động'}}</span>
+                                {{user_focus.toUser.fullName}}
+                                <span>{{socket.checkStatus(user_focus.toUser.id) ? 'Đang hoạt động' : 'Không hoạt động'}}</span>
                             </h4>
                         </div>
 
@@ -65,15 +66,26 @@
                     <!-- Message Content Inner -->
                     <div class="message-content-inner" id="message-content">
 
-                        <div *ngFor="let item of mess_focus" class="message-bubble" [ngClass]="{me: item.from_id == authService.userValue.id}">
+                        <div *ngFor="let item of mess_focus; last as isLast" class="message-bubble" [ngClass]="{me: item.fromUser.id == authService.userValue.id}">
                             <div class="message-bubble-inner">
-                                <div class="message-avatar">
-                                    <img *ngIf="item.from_id == authService.userValue.id || item.to_id == authService.userValue.id" src="{{item.from.avatar | getImage}}" alt="{{item.from.name}}" />
+                                <div class="message-avatar" pTooltip="{{item.fromUser.id == authService.userValue.id && item.status != 0 ? 'Đã xem, ' : ''}}{{item.createdAt | timevn}}" tooltipPosition="{{item.fromUser.id == authService.userValue.id ? 'right' : 'left'}}">
+                                    <img *ngIf="item.fromUser.id == authService.userValue.id || item.toUser.id == authService.userValue.id" src="{{item.fromUser.avatar | getImage}}" alt="{{item.fromUser.fullName}}" />
+                                    <i class="fa fa-eye" *ngIf="item.fromUser.id == authService.userValue.id && item.status != 0"></i>
                                 </div>
                                 <div class="message-text">
                                     <p>{{item.content}}</p>
                                 </div>
                             </div>
+                            <div class="uk-clearfix"></div>
+                                
+                            <ng-container *ngIf="item.media.length > 0">
+                                <div class="message-media">
+                                    <ng-container *ngFor="let image of item.media">
+                                        <img *ngIf="image.indexOf('data:') != -1" [src]="image" class="rounded" alt=".">
+                                        <img *ngIf="image.indexOf('data:') == -1" src="{{image | getImage:2}}" class="rounded" alt=".">
+                                    </ng-container>
+                                </div>
+                            </ng-container>
                             <div class="uk-clearfix"></div>
                         </div>
 
@@ -82,21 +94,37 @@
                     <!-- Message Content Inner / End -->
 
                     <!-- Reply Area -->
-                    <div class="message-reply">
-                        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="uk-flex-middle uk-width-1-1" uk-grid>
-                            <div class="uk-flex uk-flex-middle mr-3 uk-width-auto">
-                                <a class="button primary" uk-tooltip="Gửi ảnh">
-                                    <i class="uil-image"></i>
-                                </a>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                        <div class="message-reply" *ngIf="fileupload_preview && fileupload_preview.length > 0">
+                            <div class="uk-grid-small" uk-grid>
+                                <div *ngFor="let image of fileupload_preview">
+                                    <img [src]="image" [ngStyle]="{height: '60px'}" class="rounded" alt=".">
+                                </div>
+                                <button (click)="remeveAllFileUpload()" type="button" class="button primary uk-width-auto ml-3">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>
+                        </div>
 
-                            <input type="text" formControlName="content" class="uk-textarea uk-width-expand" placeholder="Nhập tin nhắn..." data-autoresize/>
+                        <div class="message-reply">
+                            <div class="uk-flex-middle uk-width-1-1" uk-grid>
+                                <div class="uk-flex uk-flex-middle mr-3 uk-width-auto">
+                                    <a (click)="openSelectFileUpload()" class="button primary" uk-tooltip="Gửi ảnh">
+                                        <i class="uil-image"></i>
+                                    </a>
+                                </div>
 
-                            <button type="submit" class="button primary uk-width-auto">
-                                <i class="fa fa-send-o"></i>
-                            </button>
-                        </form>
-                    </div>
+                                <input type="text" formControlName="content" class="uk-textarea uk-width-expand" placeholder="Nhập tin nhắn..." data-autoresize/>
+
+                                <button type="submit" class="button primary uk-width-auto ml-3">
+                                    <i class="fa fa-send-o"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <input style="display: none;" type="file" accept="image/*" multiple data-upload (change)="selectFileUpload($event.target.files)">
                 </div>
                 <!-- Message Content -->
             </div>

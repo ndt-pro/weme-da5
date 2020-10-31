@@ -9,11 +9,16 @@ import { EditorModule } from 'primeng/editor';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { TimeagoPipe } from '../_pipe/timeago.pipe';
+import { TimeVnPipe } from '../_pipe/timevn.pipe';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
     GetImagePipe,
     TruncatePipe,
+    TimeagoPipe,
+    TimeVnPipe,
     LoadingDirective
   ],
   imports: [
@@ -23,7 +28,8 @@ import { ButtonModule } from 'primeng/button';
     EditorModule,
     CalendarModule,
     DialogModule,
-    ButtonModule
+    ButtonModule,
+    TooltipModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -33,8 +39,11 @@ import { ButtonModule } from 'primeng/button';
     ButtonModule,
     EditorModule,
     FileUploadModule,
+    TooltipModule,
     GetImagePipe,
     TruncatePipe,
+    TimeagoPipe,
+    TimeVnPipe,
     LoadingDirective,
     CommonModule
   ]

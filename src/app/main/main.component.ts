@@ -1,7 +1,9 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from '../_lib/base.component';
+import { FileService } from '../_services/file.service';
+import { MessageService } from '../_services/message.service';
 import { SocketService } from '../_services/socket.service';
 declare var $: any;
 
@@ -16,6 +18,8 @@ export class MainComponent extends BaseComponent implements OnInit {
   constructor(
     injector: Injector,
     private socket: SocketService,
+    private messageService: MessageService,
+    private fileService: FileService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
@@ -29,6 +33,17 @@ export class MainComponent extends BaseComponent implements OnInit {
     this.form = this.formBuilder.group({
       content: ['', Validators.required]
     });
+
+    // lắng nghe người gửi tin nhắn từ socket
+    this.socket.getMessage().subscribe(res => {
+      // this.messageService.countNewMessage(this.authService.userValue.id).toPromise()
+      // .then(res => {
+      //   this.messageService.newMessage = res;
+      // });
+      if(this.socket.readMessage(res)) {
+        this.fileService.playMessageSound();
+      }
+    });
   }
   
   onSubmit() {
@@ -39,7 +54,7 @@ export class MainComponent extends BaseComponent implements OnInit {
     }
 
     $("#modalSendMessage").modal("hide");
-    this.socket.sendMessage(to_id, this.form.value.content);
+    this.socket.sendMessage(to_id, this.form.value.content, []);
     setTimeout(() => {
       this.router.navigate(['/chat']);
     }, 500);

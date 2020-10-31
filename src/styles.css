@@ -28,3 +28,41 @@
 .chats-headline {
     box-sizing: unset;
 }
+
+.post-state-btns.active {
+    background-color: #e8f0fe;
+    color: #1a73e8 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.message-bubble .message-media {
+    float: left;
+    margin-left: 62px;
+    margin-top: 10px;
+}
+
+.message-bubble.me .message-media {
+    float: right;
+    text-align: right;
+    margin-right: 62px;
+}
+
+.message-bubble .message-media img {
+    float: left;
+    height: 120px;
+    margin: 3px;
+}
+
+.message-bubble.me .message-avatar i {
+    position: absolute;
+    bottom: 0;
+    right: -20px;
+    background-color: #48c04c;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 13px;
+    padding: 3px;
+}

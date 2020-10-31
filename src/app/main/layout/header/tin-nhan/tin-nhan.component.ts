@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/_services/auth.service';
+import { MessageService } from 'src/app/_services/message.service';
 
 @Component({
   selector: 'app-tin-nhan',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TinNhanComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private messageService: MessageService,
+    private authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
+    this.messageService.countNewMessage(this.authService.userValue.id).toPromise()
+    .then(res => {
+      this.messageService.newMessage = res;
+    });
+  }
+
+  get count() {
+    return this.messageService.newMessage && this.messageService.newMessage.length;
   }
 
 }

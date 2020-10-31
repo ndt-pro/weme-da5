@@ -16,7 +16,6 @@ export class EditProfileComponent implements OnInit {
   form: FormGroup;
   loading: boolean;
   submitted: boolean;
-  user: User;
   dateFormat: any;
   locale_vn: any;
   
@@ -32,7 +31,6 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit(): void {
     document.body.scrollTop = 0;
-    this.user = this.authService.userValue;
 
     this.dateFormat = "dd/mm/yy";
     
@@ -104,6 +102,10 @@ export class EditProfileComponent implements OnInit {
       story: [this.user.story],
       birthday: [!this.user.birthday ? new Date() : new Date(this.user.birthday), Validators.required],
     });
+  }
+
+  get user(): User {
+    return this.authService.userValue;
   }
 
   get f() {
