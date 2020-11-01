@@ -16,20 +16,20 @@ export class MessageService {
         private _http: HttpClient
     ) { }
 
-    countNewMessage(user_id) {
+    countNewMessage() {
         return this._http
-            .get<any>(baseUrl + "count-new-message/" + user_id, { headers: environment.headerOptions });
+            .get<any>(baseUrl + "count-new-message", { headers: environment.headerOptions });
     }
 
-    getMessageBox(user_id) {
+    getMessageBox() {
         return this._http
-            .get<any>(baseUrl + "get-mess-box/" + user_id, { headers: environment.headerOptions });
+            .get<any>(baseUrl + "get-mess-box", { headers: environment.headerOptions });
     }
 
-    getAllMessage(fromId, toId) {
+    getMessage(toId, page) {
         let params = new HttpParams()
-        .set('from_id', fromId)
-        .set('to_id', toId);
+        .set('to_id', toId)
+        .set('page', page);
 
         return this._http
             .get<any>(baseUrl + "get-all-mess", { headers: environment.headerOptions, params: params})

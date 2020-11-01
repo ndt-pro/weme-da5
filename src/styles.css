@@ -66,3 +66,8 @@
     font-size: 13px;
     padding: 3px;
 }
+
+[class~=post] [class~=post-add-comment-avature] img {
+    width: .364583333in;
+    height: .364583333in;
+}

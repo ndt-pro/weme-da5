@@ -29,8 +29,8 @@ export class UserService {
             .post(baseUrl + "/register", data, { headers: environment.headerOptions });
     }
 
-    update(id, data) {
+    update(data) {
         return this._http
-            .put(baseUrl + id, data);
+            .put(baseUrl, data);
     }
 }

@@ -11,11 +11,10 @@ export class TinNhanComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    this.messageService.countNewMessage(this.authService.userValue.id).toPromise()
+    this.messageService.countNewMessage().toPromise()
     .then(res => {
       this.messageService.newMessage = res;
     });

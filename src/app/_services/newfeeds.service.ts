@@ -14,9 +14,28 @@ export class NewfeedsService {
         private _http: HttpClient
     ) { }
 
-    getNewfeed(idUser) {
+    getNewfeed(page, pageSize) {
+        let params = new HttpParams()
+        .set('page', page)
+        .set('pageSize', pageSize);
+
         return this._http
-            .get<any[]>(baseUrl + idUser, { headers: environment.headerOptions })
+            .get<any[]>(baseUrl, { headers: environment.headerOptions, params: params })
+            .pipe(map((res: any[]) => {
+                return res.map(data => {
+                    data.media = JSON.parse(data.media);
+                    return data;
+                });
+            }));
+    }
+
+    getNewfeedUser(idUser, page, pageSize) {
+        let params = new HttpParams()
+        .set('page', page)
+        .set('pageSize', pageSize);
+
+        return this._http
+            .get(baseUrl + idUser, { headers: environment.headerOptions, params: params })
             .pipe(map((res: any[]) => {
                 return res.map(data => {
                     data.media = JSON.parse(data.media);
@@ -35,18 +54,16 @@ export class NewfeedsService {
             .post(baseUrl + "post-newfeed", data);
     }
 
-    like(idNewfeed, idUser) {
+    like(idNewfeed) {
         return this._http
             .post(baseUrl + "like-newfeed", {
-                idNewfeed,
-                idUser
+                idNewfeed
             });
     }
 
-    delete(idNewfeed, idUser) {
+    delete(idNewfeed) {
         let params = new HttpParams()
-        .set('idPost', idNewfeed)
-        .set('idUser', idUser);
+        .set('idPost', idNewfeed);
         
         return this._http
             .delete(baseUrl, { headers: environment.headerOptions, params: params });

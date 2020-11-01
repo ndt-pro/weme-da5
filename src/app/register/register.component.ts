@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from '../_services/alert.service';
 import { AuthService } from '../_services/auth.service';
+import { ShareService } from '../_services/share.service';
 
 @Component({
   selector: 'app-register',
@@ -19,13 +20,13 @@ import { AuthService } from '../_services/auth.service';
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
-  loading: boolean;
   submitted: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private alert: AlertService,
+    private shareService: ShareService
     ) { }
 
   ngOnInit(): void {
@@ -51,7 +52,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.shareService.openLoading();
 
     let val = this.form.value;
 
@@ -65,11 +66,11 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(user).toPromise()
     .then(user => {
-      this.loading = false;
+      this.shareService.closeLoading();
       this.alert.registerSuccess();
     })
     .catch(err => {
-      this.loading = false;
+      this.shareService.closeLoading();
       this.alert.error(err);
     });
   }

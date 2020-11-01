@@ -65,8 +65,19 @@
 
                     <!-- Message Content Inner -->
                     <div class="message-content-inner" id="message-content">
+                        
+                        <div class="sp sp-circle" *ngIf="loadMoreSpinner"></div>
+                        
+                        <div
+                            infinite-scroll
+                            infiniteScrollContainer=".message-content-inner"
+                            [infiniteScrollDistance]="2"
+                            [infiniteScrollThrottle]="500"
+                            [fromRoot]="true"
+                            (scrolledUp)="onLoadMore()">
+                        </div>
 
-                        <div *ngFor="let item of mess_focus; last as isLast" class="message-bubble" [ngClass]="{me: item.fromUser.id == authService.userValue.id}">
+                        <div *ngFor="let item of mess_focus" class="message-bubble" [ngClass]="{me: item.fromUser.id == authService.userValue.id}">
                             <div class="message-bubble-inner">
                                 <div class="message-avatar" pTooltip="{{item.fromUser.id == authService.userValue.id && item.status != 0 ? 'Đã xem, ' : ''}}{{item.createdAt | timevn}}" tooltipPosition="{{item.fromUser.id == authService.userValue.id ? 'right' : 'left'}}">
                                     <img *ngIf="item.fromUser.id == authService.userValue.id || item.toUser.id == authService.userValue.id" src="{{item.fromUser.avatar | getImage}}" alt="{{item.fromUser.fullName}}" />

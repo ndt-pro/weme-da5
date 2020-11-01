@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../_services/alert.service';
 import { AuthService } from '../_services/auth.service';
+import { ShareService } from '../_services/share.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,6 @@ import { AuthService } from '../_services/auth.service';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  loading: boolean;
   submitted: boolean;
   returnUrl: string;
 
@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private alert: AlertService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private shareService: ShareService
     ) {
       if(this.authService.userValue) {
         this.router.navigate(['/']);
@@ -56,17 +57,17 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.shareService.openLoading();
 
     let val = this.form.value;
 
     this.authService.login(val.email, val.pass).toPromise()
     .then(res => {
       this.router.navigate([this.returnUrl]);
-      this.loading = false;
+      this.shareService.closeLoading();
     })
     .catch(err => {
-      this.loading = false;
+      this.shareService.closeLoading();
       this.alert.error(err);
     });
   }

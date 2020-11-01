@@ -13,6 +13,7 @@ import { ThongBaoComponent } from './layout/header/thong-bao/thong-bao.component
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ShareModule } from '../share/share.module';
+import { NewfeedsComponent } from './newfeeds/newfeeds.component';
 
 export const mainRoutes: Routes = [
   {
@@ -48,7 +49,8 @@ export const mainRoutes: Routes = [
     TinNhanComponent,
     ThongBaoComponent,
     ProfileComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    NewfeedsComponent
   ],
   imports: [
     CommonModule,

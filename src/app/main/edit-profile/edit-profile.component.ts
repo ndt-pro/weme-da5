@@ -6,6 +6,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { User } from 'src/app/_model/user';
 import { AlertService } from 'src/app/_services/alert.service';
 import { FileService } from 'src/app/_services/file.service';
+import { ShareService } from 'src/app/_services/share.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -14,7 +15,6 @@ import { FileService } from 'src/app/_services/file.service';
 })
 export class EditProfileComponent implements OnInit {
   form: FormGroup;
-  loading: boolean;
   submitted: boolean;
   dateFormat: any;
   locale_vn: any;
@@ -26,7 +26,8 @@ export class EditProfileComponent implements OnInit {
     public authService: AuthService,
     private userService: UserService,
     private alert: AlertService,
-    private fileService: FileService
+    private fileService: FileService,
+    private shareService: ShareService
   ) { }
 
   ngOnInit(): void {
@@ -123,7 +124,7 @@ export class EditProfileComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.shareService.openLoading();
 
     let val = this.form.value;
 
@@ -143,15 +144,15 @@ export class EditProfileComponent implements OnInit {
         formData.Avatar = data;
       }
 
-      this.userService.update(this.authService.userValue.id, formData).toPromise()
+      this.userService.update(formData).toPromise()
       .then(res => {
-        this.loading = false;
+        this.shareService.closeLoading();
         this.alert.successCallback("Đã sửa thông tin thành công!", () => {
           location.reload();
         });
       })
       .catch(err => {
-        this.loading = false;
+        this.shareService.closeLoading();
         this.alert.error(err);
       });
     });

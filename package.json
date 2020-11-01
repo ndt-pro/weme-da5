@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~10.0.9",
     "@angular/router": "~10.0.9",
     "bootstrap": "^4.5.3",
+    "ngx-infinite-scroll": "^9.1.0",
     "ngx-socket-io": "^3.2.0",
     "primeicons": "^4.0.0",
     "primeng": "^10.0.3",

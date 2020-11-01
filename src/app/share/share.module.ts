@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { TimeagoPipe } from '../_pipe/timeago.pipe';
 import { TimeVnPipe } from '../_pipe/timevn.pipe';
 import { TooltipModule } from 'primeng/tooltip';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { TooltipModule } from 'primeng/tooltip';
     DialogModule,
     ButtonModule,
     TooltipModule,
+    InfiniteScrollModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -40,6 +42,7 @@ import { TooltipModule } from 'primeng/tooltip';
     EditorModule,
     FileUploadModule,
     TooltipModule,
+    InfiniteScrollModule,
     GetImagePipe,
     TruncatePipe,
     TimeagoPipe,

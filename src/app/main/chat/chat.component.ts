@@ -20,6 +20,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   modalFile: boolean;
   fileupload: File[];
   fileupload_preview: any;
+  page: number = 1;
+  loadMoreSpinner: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,7 +38,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       'max-width': '1300px'
     });
 
-    this.messageService.getMessageBox(this.authService.userValue.id)
+    this.messageService.getMessageBox()
     .pipe(map((res: any) => {
       return res.map(data => {
         if(data.lastMessage.fromUserId == this.authService.userValue.id)
@@ -121,26 +123,26 @@ export class ChatComponent implements OnInit, OnDestroy {
   getAllMessage(inbox) {
     this.user_focus = inbox;
 
-    this.messageService.getAllMessage(this.authService.userValue.id, inbox.toUser.id)
-      .subscribe(res => {
+    this.messageService.getMessage(inbox.toUser.id, 1)
+    .subscribe((res: any[]) => {
 
-        this.mess_focus = res;
+      this.mess_focus = res.slice().reverse();
 
-        this.messageService.newMessage = this.messageService.newMessage.filter(mess => {
-          return mess.fromUserId != inbox.toUser.id;
-        });
-        
-        this.messageService.seeMessage(inbox.toUser.id, this.authService.userValue.id).toPromise()
-        .then(res => {
-          this.user_focus.lastMessage.status = 1;
-          this.socket.seenMessage(inbox.toUser.id);
-        });
-
-        setTimeout(() => {
-          this.autoScroll();
-        }, 700);
-
+      this.messageService.newMessage = this.messageService.newMessage.filter(mess => {
+        return mess.fromUserId != inbox.toUser.id;
       });
+      
+      this.messageService.seeMessage(inbox.toUser.id, this.authService.userValue.id).toPromise()
+      .then(res => {
+        this.user_focus.lastMessage.status = 1;
+        this.socket.seenMessage(inbox.toUser.id);
+      });
+
+      setTimeout(() => {
+        this.autoScroll();
+      }, 700);
+
+    });
     
   }
 
@@ -211,6 +213,16 @@ export class ChatComponent implements OnInit, OnDestroy {
   remeveAllFileUpload() {
     this.fileupload_preview = undefined;
     this.fileupload = undefined;
+  }
+
+  onLoadMore() {
+    this.page++;
+    this.loadMoreSpinner = true;
+    this.messageService.getMessage(this.user_focus.toUser.id, this.page)
+    .subscribe((res: any[]) => {
+      this.loadMoreSpinner = false;
+      this.mess_focus = res.slice().reverse().concat(this.mess_focus);
+    });
   }
 
 }
