@@ -1,51 +1,55 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { User } from 'src/app/_model/user';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from 'src/app/_services/alert.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { NewfeedCommentsService } from 'src/app/_services/newfeeds.comment.service';
 import { NewfeedsService } from 'src/app/_services/newfeeds.service';
 import { ShareService } from 'src/app/_services/share.service';
 import { SocketService } from 'src/app/_services/socket.service';
-declare var $: any;
 
 @Component({
-  selector: 'app-newfeeds',
-  templateUrl: './newfeeds.component.html',
-  styleUrls: ['./newfeeds.component.css']
+  selector: 'app-comment',
+  templateUrl: './comment.component.html',
+  styleUrls: ['./comment.component.css']
 })
-export class NewfeedsComponent implements OnInit {
-  @Input() user_view: User;
+export class CommentComponent implements OnInit {
   form: FormGroup;
-  timeline: any[];
+  newfeed_view: any;
   loadingUserLikes: boolean;
   newfeedsLike: any[];
   modalUserLikes: boolean;
-  page: number = 1;
-  pageSize: number = 5;
+  comments: any[];
+  loadMore: boolean;
   loadMoreSpinner: boolean;
-  loadOutOfData: boolean;
+  page: number = 1;
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private alert: AlertService,
-    private newfeedsService: NewfeedsService,
-    public socket: SocketService,
-    private shareService: ShareService,
-    private commentService: NewfeedCommentsService,
+    private route: ActivatedRoute,
     private router: Router,
-  ) { }
+    private newfeedsService: NewfeedsService,
+    private commentService: NewfeedCommentsService,
+    private shareService: ShareService,
+    private alert: AlertService,
+    private authService: AuthService,
+    public socket: SocketService,
+    ) { }
 
   ngOnInit(): void {
-    this.getNewfeed();
+    this.route.paramMap.subscribe((data : any) => {
+      let cid = data.params.cid;
 
-    this.shareService.output()
-    .subscribe(cmd => {
-      if(cmd == 'refresh-newfeeds') {
-        this.onRefreshNewFeeds();
-      }
+      this.newfeedsService.getNewfeedById(cid)
+      .subscribe(res => {
+        this.newfeed_view = res;
+      });
+
+      this.commentService.getComments(cid, this.page)
+      .subscribe((res: any) => {
+        this.comments = res.results.slice().reverse();
+        this.loadMore = res.currentPage < res.pageCount;
+      });
     });
     
     this.form = this.formBuilder.group({
@@ -57,37 +61,24 @@ export class NewfeedsComponent implements OnInit {
     return this.authService.userValue;
   }
 
-  onSubmit(newfeed) {
+  onSubmit() {
     if (this.form.invalid) {
       return;
     }
     
     this.shareService.openLoading();
 
-    this.commentService.postComment(newfeed.id, this.form.value.content).toPromise()
+    this.commentService.postComment(this.newfeed_view.id, this.form.value.content).toPromise()
     .then(res => {
-      this.router.navigate(['/comment', newfeed.id]);
+      this.comments.push(res);
+      this.form.patchValue({
+        content: ''
+      });
       this.shareService.closeLoading();
     })
     .catch(err => {
       this.shareService.closeLoading();
       this.alert.error(err);
-    });
-  }
-
-  getNewfeed(append?: boolean, callback?) {
-    let get = this.newfeedsService.getNewfeed(this.page, this.pageSize);
-    if(this.user_view) {
-      get = this.newfeedsService.getNewfeedUser(this.user_view.id, this.page, this.pageSize)
-    }
-    get.subscribe(res => {
-      this.loadOutOfData = false;
-      if(callback) callback(res);
-      if(append) {
-        this.timeline = this.timeline.concat(res);
-      } else {
-        this.timeline = res;
-      }
     });
   }
 
@@ -98,7 +89,7 @@ export class NewfeedsComponent implements OnInit {
       .then(res => {
         this.shareService.closeLoading();
         this.alert.successCallback("Đã xóa bài viết thành công!", () => {
-          this.getNewfeed();
+          this.router.navigate(['/']);
         });
       })
       .catch(err => {
@@ -144,30 +135,12 @@ export class NewfeedsComponent implements OnInit {
   onLoadMore() {
     this.page++;
     this.loadMoreSpinner = true;
-
-    this.getNewfeed(true, (res) => {
+    this.commentService.getComments(this.newfeed_view.id, this.page)
+    .subscribe((res: any) => {
       this.loadMoreSpinner = false;
-      if(res.length == 0) {
-        this.loadOutOfData = true;
-      }
+      this.comments = res.results.slice().reverse().concat(this.comments);
+      this.loadMore = res.currentPage < res.pageCount;
     });
-  }
-
-  onRefreshNewFeeds() {
-    this.shareService.openLoading();
-    this.page = 1;
-    this.getNewfeed(false, (res) => {
-      this.shareService.closeLoading();
-      this.autoScroll();
-    });
-  }
-
-  autoScroll() {
-    let scrollTo = $('#scroll-to-top');
-
-    $('html, body').animate({
-      scrollTop: scrollTo.offset().top
-    }, 800);
   }
 
 }

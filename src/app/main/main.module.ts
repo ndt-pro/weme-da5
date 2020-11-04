@@ -11,9 +11,10 @@ import { DsOnlineComponent } from './home/ds-online/ds-online.component';
 import { TinNhanComponent } from './layout/header/tin-nhan/tin-nhan.component';
 import { ThongBaoComponent } from './layout/header/thong-bao/thong-bao.component';
 import { ProfileComponent } from './profile/profile.component';
-import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ShareModule } from '../share/share.module';
 import { NewfeedsComponent } from './newfeeds/newfeeds.component';
+import { EditProfileComponent } from './profile/edit/edit-profile.component';
+import { CommentComponent } from './newfeeds/comment/comment.component';
 
 export const mainRoutes: Routes = [
   {
@@ -34,6 +35,9 @@ export const mainRoutes: Routes = [
       {
           path: 'profile/:uid', component: ProfileComponent
       },
+      {
+          path: 'comment/:cid', component: CommentComponent
+      },
     ]
   }
 ];
@@ -50,7 +54,8 @@ export const mainRoutes: Routes = [
     ThongBaoComponent,
     ProfileComponent,
     EditProfileComponent,
-    NewfeedsComponent
+    NewfeedsComponent,
+    CommentComponent
   ],
   imports: [
     CommonModule,

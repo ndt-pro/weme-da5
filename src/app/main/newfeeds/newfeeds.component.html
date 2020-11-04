@@ -69,17 +69,19 @@
 
     <div class="post-state">
         <div class="post-state-btns" [ngClass]="{'active': item.liked}" (click)="onLike(item)"> <i class="uil-thumbs-up"></i> <span> Thích </span> </div>
-        <div class="post-state-btns"> <i class="uil-comment-alt-dots"></i> <span> Bình luận</span> </div>
+        <div class="post-state-btns" [routerLink]="['/comment', item.id]" > <i class="uil-comment-alt-dots"></i> <span> Bình luận</span> </div>
     </div>
 
     <!-- post comments -->
     <div class="post-comments">
         <div class="post-add-comment">
             <div class="post-add-comment-avature">
-                <img src="{{user.avatar | getImage}}" alt="{{user.fullName}}">
+                <img src="{{user?.avatar | getImage}}" alt="{{user?.fullName}}">
             </div>
             <div class="post-add-comment-text-area">
-                <input type="text" placeholder="Viết bình luận...">
+                <form [formGroup]="form" (ngSubmit)="onSubmit(item)">
+                    <input type="text" formControlName="content" placeholder="Viết bình luận...">
+                </form>
             </div>
         </div>
     </div>

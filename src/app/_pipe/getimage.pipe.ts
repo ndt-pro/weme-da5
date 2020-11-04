@@ -10,6 +10,9 @@ export class GetImagePipe implements PipeTransform {
     ];
 
     transform(name: string, type: number = 0) {
+        if(!name) {
+            return environment.imageUrl + "spinner.gif";
+        }
         return environment.imageUrl + this.types[type] + name;
     }
 }

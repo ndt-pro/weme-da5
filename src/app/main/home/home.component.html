@@ -6,7 +6,7 @@
             <div class="post-new" uk-toggle="target: body ; cls: post-focus">
                 <div class="post-new-media">
                     <div class="post-new-media-user">
-                        <img src="{{user.avatar | getImage}}" alt="">
+                        <img src="{{user?.avatar | getImage}}" alt="">
                     </div>
                     <div class="post-new-media-input">
                         <input (click)="openModal()" type="text" class="uk-input" placeholder="Bạn đang nghĩ gì?">
@@ -24,7 +24,7 @@
                 <p-dialog header="Thêm trạng thái" [(visible)]="modal" [modal]="true" [style]="{ width: '50vw', marginTop: '100px' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" position="top">
                     <div class="post-new-media">
                         <div class="post-new-media-user">
-                            <img src="{{user.avatar | getImage}}" alt="">
+                            <img src="{{user?.avatar | getImage}}" alt="">
                         </div>
                         <div class="post-new-media-input">
                             <textarea class="uk-textarea" rows="5" placeholder="Bạn đang nghĩ gì?" formControlName="content"></textarea>

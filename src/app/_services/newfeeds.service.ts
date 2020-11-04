@@ -29,13 +29,22 @@ export class NewfeedsService {
             }));
     }
 
+    getNewfeedById(idNewfeed) {
+        return this._http
+            .get(baseUrl + idNewfeed, { headers: environment.headerOptions })
+            .pipe(map((res: any) => {
+                res.media = JSON.parse(res.media);
+                return res;
+            }));
+    }
+
     getNewfeedUser(idUser, page, pageSize) {
         let params = new HttpParams()
         .set('page', page)
         .set('pageSize', pageSize);
 
         return this._http
-            .get(baseUrl + idUser, { headers: environment.headerOptions, params: params })
+            .get(baseUrl + "get-newfeeds-user/" + idUser, { headers: environment.headerOptions, params: params })
             .pipe(map((res: any[]) => {
                 return res.map(data => {
                     data.media = JSON.parse(data.media);
