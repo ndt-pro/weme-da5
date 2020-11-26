@@ -67,8 +67,8 @@ export class HomeComponent implements OnInit {
         this.newfeedsService.post(formData)
         .subscribe(res => {
           this.shareService.closeLoading();
-          this.alert.success("Đăng tải trạng thái thành công.");
           this.shareService.input('refresh-newfeeds');
+          this.alert.success("Đăng tải trạng thái thành công.");
         }, err => {
           this.shareService.closeLoading();
           this.alert.error("Đăng tải trạng thái thất bại.");

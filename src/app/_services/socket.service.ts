@@ -14,6 +14,7 @@ export class SocketService {
         ON: '1',
         SEND_MESSAGE: '2',
         SEE_MESSAGE: '3',
+        NOTIFICATION: '4',
     };
 
     constructor(
@@ -23,6 +24,7 @@ export class SocketService {
     ) {
         this.getOn().subscribe(res => {
             this.list_online = res.filter(user => user.id != this.authService.userValue.id);
+            
         });
     }
 
@@ -33,11 +35,11 @@ export class SocketService {
 
     initReadMessage(res) {
         let newMsg = this.messageService.newMessage.filter(mess => {
-            return mess.fromUserId == res.fromUser.id;
+            return mess.to_user_id != res.from_user.id;
         });
 
         if(newMsg.length == 0) {
-            this.messageService.newMessage.push({ fromUserId: res.fromUser.id });
+            this.messageService.newMessage.push({ to_user_id: res.from_user.id });
         }
     }
 
@@ -51,8 +53,8 @@ export class SocketService {
 
     sendMessage(toId, message, media) {
         this.socket.emit(this._KEY.SEND_MESSAGE, {
-            fromUser: this.authService.userValue,
-            toId: toId,
+            from_user: this.authService.userValue,
+            to_id: toId,
             content: message,
             media: media,
         });
@@ -60,21 +62,25 @@ export class SocketService {
 
     seenMessage(toId) {
         this.socket.emit(this._KEY.SEE_MESSAGE, {
-            fromUserId: this.authService.userValue.id,
-            toUserId: toId
+            from_user_id: this.authService.userValue.id,
+            to_user_id: toId
         });
     }
 
     getMessage() {
         return this.socket.fromEvent<any>(this._KEY.SEND_MESSAGE)
-            .pipe(map((res: any) => {
-                res.media = JSON.parse(res.media);
-                return res;
-            }));
     }
 
     getSeenMessage() {
         return this.socket.fromEvent<any>(this._KEY.SEE_MESSAGE);
+    }
+
+    getNotification() {
+        return this.socket.fromEvent<any>(this._KEY.NOTIFICATION);
+    }
+
+    pushNotification(data) {
+        this.socket.emit(this._KEY.NOTIFICATION, data);
     }
 
     checkStatus(id): boolean {

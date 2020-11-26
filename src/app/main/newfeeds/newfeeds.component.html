@@ -1,11 +1,11 @@
 <div class="post" *ngFor="let item of timeline">
     <div class="post-heading">
         <div class="post-avature">
-            <img src="{{item.user.avatar | getImage}}" alt="{{item.user.fullName}}">
+            <img src="{{item.user.avatar | getImage}}" alt="{{item.user.full_name}}">
         </div>
         <div class="post-title">
-            <a [routerLink]="['/profile', item.user.id]"><h4> {{item.user.fullName}} </h4></a>
-            <p> {{item.createdAt | timeago}} <i class="uil-clock"></i> </p>
+            <a [routerLink]="['/profile', item.user.id]"><h4> {{item.user.full_name}} </h4></a>
+            <p> {{item.created_at | timeago}} <i class="uil-clock"></i> </p>
         </div>
 
         <div class="post-btn-action" *ngIf="item.user.id == user.id">
@@ -60,9 +60,9 @@
         <div class="post-state-details">
             <div class="cursor-pointer" (click)="openModalUserLikes(item)">
                 <img src="assets/images/icons/reactions_like.png" alt="">
-                <p> {{item.countLike}} </p>
+                <p> {{item.count_like}} </p>
             </div>
-            <p> {{item.countComment}} Bình luận</p>
+            <p> {{item.count_comment}} Bình luận</p>
         </div>
 
     </div>
@@ -90,13 +90,13 @@
         <a *ngFor="let user of newfeedsLike" [routerLink]="['/profile', user.id]" >
             <div class="contact-list">
                 <div class="contact-list-media">
-                    <img src="{{user.avatar | getImage}}" alt="{{user.fullName}}">
+                    <img src="{{user.avatar | getImage}}" alt="{{user.full_name}}">
                     <span [ngClass]="{
                         'online-dot': socket.checkStatus(user.id),
                         'offline-dot': !socket.checkStatus(user.id)
                     }"></span>
                 </div>
-                <h5> {{user.fullName}} </h5>
+                <h5> {{user.full_name}} </h5>
             </div>
         </a>
         <div class="sp sp-circle" *ngIf="loadingUserLikes"></div>

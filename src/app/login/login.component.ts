@@ -5,6 +5,8 @@ import { AlertService } from '../_services/alert.service';
 import { AuthService } from '../_services/auth.service';
 import { ShareService } from '../_services/share.service';
 
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from "angularx-social-login";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,6 +25,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   submitted: boolean;
   returnUrl: string;
+  userSocial: SocialUser;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,7 +33,8 @@ export class LoginComponent implements OnInit {
     private alert: AlertService,
     private router: Router,
     private route: ActivatedRoute,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private socialAuthService: SocialAuthService
     ) {
       if(this.authService.userValue) {
         this.router.navigate(['/']);
@@ -38,6 +42,21 @@ export class LoginComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    
+    this.socialAuthService.authState.subscribe(user => {
+      this.userSocial = user;
+
+      this.authService.socialLogin(this.userSocial).toPromise()
+      .then(res => {
+        this.router.navigate([this.returnUrl]);
+        this.shareService.closeLoading();
+      })
+      .catch(err => {
+        this.shareService.closeLoading();
+        this.alert.error(err);
+      });
+    });
+
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       pass: ['', Validators.required]
@@ -72,4 +91,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  signInWithGoogle(): void {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithFacebook(): void {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
 }

@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies" : [
+            "allowedCommonJsDependencies": [
               "socket.io-client",
               "debug"
             ],
@@ -38,7 +38,8 @@
               "node_modules/sweetalert2/src/sweetalert2.scss",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/saga-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/js/framework.js",
@@ -139,6 +140,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "weme"
+    }
+  },
+  "defaultProject": "weme",
+  "cli": {
+    "analytics": "c0046cf4-a2e9-4507-af55-b9b42e7e41be"
+  }
 }

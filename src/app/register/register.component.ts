@@ -57,11 +57,11 @@ export class RegisterComponent implements OnInit {
     let val = this.form.value;
 
     let user = {
-      Email: val.email,
-      Password: val.pass,
-      FullName: val.full_name,
-      PhoneNumber: val.phone_number,
-      Address: "Mặc định",
+      email: val.email,
+      password: val.pass,
+      full_name: val.full_name,
+      phone_number: val.phone_number,
+      address: "Mặc định",
     };
 
     this.authService.register(user).toPromise()

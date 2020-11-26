@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="flex-sb-m w-full p-b-30">
+                <div class="flex-sb-m w-full mb-2">
                     <div>
                         <button class="login100-form-btn">
                             Đăng nhập
@@ -53,6 +53,22 @@
                     <div>
                         <button class="login100-form-btn red ml-5" [routerLink]="['/register']">
                             Tạo tài khoản
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-full text-center p-3">Hoặc</div>
+
+                <div class="flex-sb-m w-full">
+                    <div>
+                        <button type="button" (click)="signInWithFacebook()" class="login100-form-btn">
+                            <i class="fa fa-facebook-square mr-2"></i> Facebook
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" (click)="signInWithGoogle()" class="login100-form-btn red ml-5">
+                            <i class="fa fa-google-plus-square mr-2"></i> Google
                         </button>
                     </div>
                 </div>

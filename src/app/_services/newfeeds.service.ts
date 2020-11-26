@@ -66,13 +66,13 @@ export class NewfeedsService {
     like(idNewfeed) {
         return this._http
             .post(baseUrl + "like-newfeed", {
-                idNewfeed
+                newfeed_id: idNewfeed
             });
     }
 
     delete(idNewfeed) {
         let params = new HttpParams()
-        .set('idPost', idNewfeed);
+        .set('newfeed_id', idNewfeed);
         
         return this._http
             .delete(baseUrl, { headers: environment.headerOptions, params: params });

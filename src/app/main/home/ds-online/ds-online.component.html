@@ -11,9 +11,9 @@
         <ng-container *ngFor="let item of socket.list_online">
             <a [routerLink]="['/profile', item.id]" >
                 <div class="contact-list">
-                    <div class="contact-list-media"> <img src="{{item.avatar | getImage}}" alt="{{item.fullName}}">
+                    <div class="contact-list-media"> <img src="{{item.avatar | getImage}}" alt="{{item.full_name}}">
                         <span class="online-dot"></span> </div>
-                    <h5> {{item.fullName}} </h5>
+                    <h5> {{item.full_name}} </h5>
                 </div>
             </a>
             <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
@@ -22,7 +22,7 @@
                         <img src="{{item.avatar | getImage}}" alt="{{item.fullName}}">
                         <span class="online-dot"></span>
                     </div>
-                    <h4> {{item.fullName}} </h4>
+                    <h4> {{item.full_name}} </h4>
                     <div class="contact-list-box-btns">
                         <a (click)="openModalMessage(item)" class="button primary block mr-2">
                             <i class="uil-envelope mr-1"></i>

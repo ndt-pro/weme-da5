@@ -6,6 +6,7 @@ import { AlertService } from 'src/app/_services/alert.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { NewfeedCommentsService } from 'src/app/_services/newfeeds.comment.service';
 import { NewfeedsService } from 'src/app/_services/newfeeds.service';
+import { NotificationService } from 'src/app/_services/notification.service';
 import { ShareService } from 'src/app/_services/share.service';
 import { SocketService } from 'src/app/_services/socket.service';
 declare var $: any;
@@ -35,6 +36,7 @@ export class NewfeedsComponent implements OnInit {
     public socket: SocketService,
     private shareService: ShareService,
     private commentService: NewfeedCommentsService,
+    private notificationService: NotificationService,
     private router: Router,
   ) { }
 
@@ -66,6 +68,12 @@ export class NewfeedsComponent implements OnInit {
 
     this.commentService.postComment(newfeed.id, this.form.value.content).toPromise()
     .then(res => {
+      if(newfeed.user.id != this.user.id) {
+        this.notificationService.pushComment(newfeed.id)
+        .subscribe(data => {
+          if(data) this.socket.pushNotification(data);
+        });
+      }
       this.router.navigate(['/comment', newfeed.id]);
       this.shareService.closeLoading();
     })
@@ -111,11 +119,18 @@ export class NewfeedsComponent implements OnInit {
   onLike(post) {
     this.newfeedsService.like(post.id).toPromise()
     .then((res: any) => {
-      if(res.isLike) {
-        post.countLike++;
+      if(res.is_like) {
+        post.count_like++;
         post.liked = true;
+        
+        if(post.user.id != this.user.id) {
+          this.notificationService.pushLike(post.id)
+          .subscribe(data => {
+            if(data) this.socket.pushNotification(data);
+          });
+        }
       } else {
-        post.countLike--;
+        post.count_like--;
         post.liked = false;
       }
     });

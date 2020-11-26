@@ -5,8 +5,10 @@ import { AlertService } from 'src/app/_services/alert.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { NewfeedCommentsService } from 'src/app/_services/newfeeds.comment.service';
 import { NewfeedsService } from 'src/app/_services/newfeeds.service';
+import { NotificationService } from 'src/app/_services/notification.service';
 import { ShareService } from 'src/app/_services/share.service';
 import { SocketService } from 'src/app/_services/socket.service';
+declare var $: any;
 
 @Component({
   selector: 'app-comment',
@@ -34,6 +36,7 @@ export class CommentComponent implements OnInit {
     private alert: AlertService,
     private authService: AuthService,
     public socket: SocketService,
+    private notificationService: NotificationService,
     ) { }
 
   ngOnInit(): void {
@@ -48,7 +51,8 @@ export class CommentComponent implements OnInit {
       this.commentService.getComments(cid, this.page)
       .subscribe((res: any) => {
         this.comments = res.results.slice().reverse();
-        this.loadMore = res.currentPage < res.pageCount;
+        
+        this.loadMore = res.current_page < res.page_count;
       });
     });
     
@@ -70,6 +74,12 @@ export class CommentComponent implements OnInit {
 
     this.commentService.postComment(this.newfeed_view.id, this.form.value.content).toPromise()
     .then(res => {
+      if(this.newfeed_view.user.id != this.user.id) {
+        this.notificationService.pushComment(this.newfeed_view.id)
+        .subscribe(data => {
+          if(data) this.socket.pushNotification(data);
+        });
+      }
       this.comments.push(res);
       this.form.patchValue({
         content: ''
@@ -102,11 +112,18 @@ export class CommentComponent implements OnInit {
   onLike(post) {
     this.newfeedsService.like(post.id).toPromise()
     .then((res: any) => {
-      if(res.isLike) {
-        post.countLike++;
+      if(res.is_like) {
+        post.count_like++;
         post.liked = true;
+        
+        if(post.user.id != this.user.id) {
+          this.notificationService.pushLike(post.id)
+          .subscribe(data => {
+            if(data) this.socket.pushNotification(data);
+          });
+        }
       } else {
-        post.countLike--;
+        post.count_like--;
         post.liked = false;
       }
     });
@@ -121,6 +138,13 @@ export class CommentComponent implements OnInit {
     .then(res => {
       this.newfeedsLike = res;
       this.loadingUserLikes = false;
+      
+      if(post.user.id != this.user.id) {
+        this.notificationService.pushLike(post.id)
+        .subscribe(data => {
+          if(data) this.socket.pushNotification(data);
+        });
+      }
     })
     .catch(err => {
       this.loadingUserLikes = false;
@@ -139,8 +163,12 @@ export class CommentComponent implements OnInit {
     .subscribe((res: any) => {
       this.loadMoreSpinner = false;
       this.comments = res.results.slice().reverse().concat(this.comments);
-      this.loadMore = res.currentPage < res.pageCount;
+      this.loadMore = res.current_page < res.page_count;
     });
+  }
+
+  focusComment() {
+    $("[formControlName='content']").focus();
   }
 
 }

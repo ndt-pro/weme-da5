@@ -23,6 +23,9 @@ export class NewfeedCommentsService {
 
     postComment(idNewfeed, content) {
         return this._http
-            .post(baseUrl, {idNewfeed, content}, { headers: environment.headerOptions });
+            .post(baseUrl, {
+                id_newfeed: idNewfeed,
+                content,
+            }, { headers: environment.headerOptions });
     }
 }

@@ -10,21 +10,21 @@
                     </div>
 
                     <ul>
-                        <li *ngFor="let item of mess_box" [ngClass]="{'active-message': item.lastMessage.status == 0}">
+                        <li *ngFor="let item of mess_box" [ngClass]="{'active-message': item.last_message.status == 0}">
                             <a (click)="getAllMessage(item)">
                                 <div class="message-avatar">
                                     <i class="status-icon" [ngClass]="{
-                                        'status-online': socket.checkStatus(item.toUser.id),
-                                        'status-offline': !socket.checkStatus(item.toUser.id)
+                                        'status-online': socket.checkStatus(item.to_user.id),
+                                        'status-offline': !socket.checkStatus(item.to_user.id)
                                     }"></i>
-                                    <img src="{{item.toUser.avatar | getImage}}" alt="." />
+                                    <img src="{{item.to_user.avatar | getImage}}" alt="." />
                                 </div>
                                 <div class="message-by">
                                     <div class="message-by-headline">
-                                        <h5>{{item.toUser.fullName}}</h5>
-                                        <span>{{item.lastMessage.createdAt | timeago:1}}</span>
+                                        <h5>{{item.to_user.full_name}}</h5>
+                                        <span>{{item.last_message.created_at | timeago:1}}</span>
                                     </div>
-                                    <p [ngStyle]="{fontWeight: item.lastMessage.status == 0 ? 'bold' : 'normal'}">{{item.lastMessage.content}}</p>
+                                    <p [ngStyle]="{fontWeight: item.last_message.status == 0 ? 'bold' : 'normal'}">{{item.last_message.content}}</p>
                                 </div>
                             </a>
                         </li>
@@ -37,10 +37,10 @@
                     <div class="chats-headline">
 
                         <div class="uk-flex">
-                            <img src="{{user_focus.toUser.avatar | getImage}}" width="40px" height="40px" class="uk-border-circle" alt="">
+                            <img src="{{user_focus.to_user.avatar | getImage}}" width="40px" height="40px" class="uk-border-circle" alt="">
                             <h4 class="ml-2">
-                                {{user_focus.toUser.fullName}}
-                                <span>{{socket.checkStatus(user_focus.toUser.id) ? 'Đang hoạt động' : 'Không hoạt động'}}</span>
+                                {{user_focus.to_user.full_name}}
+                                <span>{{socket.checkStatus(user_focus.to_user.id) ? 'Đang hoạt động' : 'Không hoạt động'}}</span>
                             </h4>
                         </div>
 
@@ -77,11 +77,11 @@
                             (scrolledUp)="onLoadMore()">
                         </div>
 
-                        <div *ngFor="let item of mess_focus" class="message-bubble" [ngClass]="{me: item.fromUser.id == authService.userValue.id}">
+                        <div *ngFor="let item of mess_focus" class="message-bubble" [ngClass]="{me: item.from_user.id == authService.userValue.id}">
                             <div class="message-bubble-inner">
-                                <div class="message-avatar" pTooltip="{{item.fromUser.id == authService.userValue.id && item.status != 0 ? 'Đã xem, ' : ''}}{{item.createdAt | timevn}}" tooltipPosition="{{item.fromUser.id == authService.userValue.id ? 'right' : 'left'}}">
-                                    <img *ngIf="item.fromUser.id == authService.userValue.id || item.toUser.id == authService.userValue.id" src="{{item.fromUser.avatar | getImage}}" alt="{{item.fromUser.fullName}}" />
-                                    <i class="fa fa-eye" *ngIf="item.fromUser.id == authService.userValue.id && item.status != 0"></i>
+                                <div class="message-avatar" pTooltip="{{item.from_user.id == authService.userValue.id && item.status != 0 ? 'Đã xem, ' : ''}}{{item.created_at | timevn}}" tooltipPosition="{{item.from_user.id == authService.userValue.id ? 'right' : 'left'}}">
+                                    <img *ngIf="item.from_user.id == authService.userValue.id || item.to_user.id == authService.userValue.id" src="{{item.from_user.avatar | getImage}}" alt="{{item.from_user.full_name}}" />
+                                    <i class="fa fa-eye" *ngIf="item.from_user.id == authService.userValue.id && item.status != 0"></i>
                                 </div>
                                 <div class="message-text">
                                     <p>{{item.content}}</p>

@@ -28,7 +28,7 @@ export class MessageService {
 
     getMessage(toId, page) {
         let params = new HttpParams()
-        .set('to_id', toId)
+        .set('to_user_id', toId)
         .set('page', page);
 
         return this._http
@@ -41,10 +41,9 @@ export class MessageService {
             }));
     }
 
-    seeMessage(fromId, toId) {
+    seeMessage(fromId) {
         let data = {
-            fromUserId: fromId,
-            toUserId: toId,
+            from_user_id: fromId
         };
         return this._http
             .put(baseUrl + "see-message", data, { headers: environment.headerOptions });

@@ -1,8 +1,8 @@
 export class User {
     public id: number;
     public email: string;
-    public phoneNumber: string;
-    public fullName: string;
+    public phone_number: string;
+    public full_name: string;
     public address: string;
     public avatar: string;
     public story: string;

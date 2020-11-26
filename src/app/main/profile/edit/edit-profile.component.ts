@@ -97,8 +97,8 @@ export class EditProfileComponent implements OnInit {
     };
     
     this.form = this.formBuilder.group({
-      full_name: [this.user.fullName, Validators.required],
-      phone_number: [this.user.phoneNumber, [Validators.required, Validators.pattern('^(0)[0-9]{9}$')]],
+      full_name: [this.user.full_name, Validators.required],
+      phone_number: [this.user.phone_number, [Validators.required, Validators.pattern('^(0)[0-9]{9}$')]],
       address: [this.user.address, Validators.required],
       story: [this.user.story],
       birthday: [!this.user.birthday ? new Date() : new Date(this.user.birthday), Validators.required],
@@ -131,17 +131,17 @@ export class EditProfileComponent implements OnInit {
     let file = this.file_avatar.files[0];
 
     let formData = {
-      FullName: val.full_name,
-      PhoneNumber: val.phone_number,
-      Address: val.address,
-      Story: val.story,
-      Birthday: val.birthday,
-      Avatar: undefined,
+      full_name: val.full_name,
+      phone_number: val.phone_number,
+      address: val.address,
+      story: val.story,
+      birthday: val.birthday,
+      avatar: undefined,
     };
 
     this.fileService.getEncodeFromImage(file).subscribe(data => {
       if(data != null) {
-        formData.Avatar = data;
+        formData.avatar = data;
       }
 
       this.userService.update(formData).toPromise()

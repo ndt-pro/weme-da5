@@ -71,3 +71,8 @@
     width: .364583333in;
     height: .364583333in;
 }
+
+.notification-active {
+    font-weight: bold;
+    background-color: rgba(214, 214, 214, 0.39);
+}

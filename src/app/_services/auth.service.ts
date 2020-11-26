@@ -34,16 +34,24 @@ export class AuthService {
 
     login(email: string, password: string) {
         return this._http.post<any>(baseUrl + "/login", {
-            Email: email,
-            Password: password
+            email: email,
+            password: password
         }, { headers: environment.headerOptions })
         .pipe(map(data => {
-            data.user.token = data.token;
-
-            localStorage.setItem('user', JSON.stringify(data.user));
-            this.userSubject.next(data.user);
+            localStorage.setItem('user', JSON.stringify(data));
+            this.userSubject.next(data);
             
-            return data.user;
+            return data;
+        }));
+    }
+
+    socialLogin(socialUser) {
+        return this._http.post<any>(baseUrl + "/social-login", socialUser, { headers: environment.headerOptions })
+        .pipe(map(data => {
+            localStorage.setItem('user', JSON.stringify(data));
+            this.userSubject.next(data);
+            
+            return data;
         }));
     }
 

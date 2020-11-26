@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../_lib/base.component';
 import { FileService } from '../_services/file.service';
+import { NotificationService } from '../_services/notification.service';
 import { SocketService } from '../_services/socket.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class MainComponent extends BaseComponent implements OnInit {
   constructor(
     injector: Injector,
     private socket: SocketService,
-    private fileService: FileService,
+    private fileService: FileService
   ) {
     super(injector);
   }
@@ -24,10 +25,6 @@ export class MainComponent extends BaseComponent implements OnInit {
 
     // lắng nghe người gửi tin nhắn từ socket
     this.socket.getMessage().subscribe(res => {
-      // this.messageService.countNewMessage(this.authService.userValue.id).toPromise()
-      // .then(res => {
-      //   this.messageService.newMessage = res;
-      // });
       if(this.socket.readMessage(res)) {
         this.fileService.playMessageSound();
       }
